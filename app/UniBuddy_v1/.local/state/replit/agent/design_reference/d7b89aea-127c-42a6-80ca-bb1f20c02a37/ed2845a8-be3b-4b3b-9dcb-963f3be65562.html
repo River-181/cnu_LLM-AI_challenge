@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniBuddy - 마음의 통역사</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'cnu-blue': '#1E3A8A',
+                        'cnu-light': '#3B82F6',
+                        'emotion-stress': '#EF4444',
+                        'emotion-anxiety': '#F59E0B',
+                        'emotion-joy': '#10B981',
+                        'emotion-depression': '#8B5CF6'
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.3s ease-out'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(10px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 100%);
+        }
+        .emotion-indicator {
+            transition: all 0.3s ease;
+        }
+        .chat-bubble {
+            animation: slideUp 0.3s ease-out;
+        }
+        .sentiment-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+    </style>
+</head>
+<body class="font-inter bg-gray-50 min-h-screen">
+    <!-- @COMPONENT: NavigationBar -->
+    <nav class="gradient-bg text-white px-4 py-3 shadow-lg">
+        <div class="flex items-center justify-between max-w-7xl mx-auto">
+            <div class="flex items-center space-x-4">
+                <button class="text-white hover:text-blue-200 transition-colors" data-event="click:goBack">
+                    <i class="fas fa-arrow-left text-xl"></i>
+                </button>
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                        <i class="fas fa-graduation-cap text-cnu-blue"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-semibold">마음의 통역사</h1>
+                        <p class="text-xs text-blue-200">Emotional Support AI</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center space-x-3">
+                <!-- 현재 감정 상태 표시 -->
+                <div class="flex items-center space-x-2 bg-white/10 rounded-full px-3 py-1">
+                    <div class="w-2 h-2 bg-emotion-joy rounded-full sentiment-pulse"></div>
+                    <span class="text-sm" data-bind="currentEmotion">안정</span>
+                </div>
+                <select class="bg-white/10 text-white text-sm rounded px-2 py-1 border-none" data-event="change:changeLanguage">
+                    <option value="ko">한국어</option>
+                    <option value="en">English</option>
+                    <option value="zh">中文</option>
+                </select>
+                <button class="text-white hover:text-blue-200 transition-colors" data-event="click:openSettings">
+                    <i class="fas fa-cog text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <!-- @END_COMPONENT: NavigationBar -->
+
+    <div class="max-w-7xl mx-auto p-4 grid lg:grid-cols-3 gap-6 h-[calc(100vh-80px)]">
+        <!-- @COMPONENT: ChatInterface -->
+        <div class="lg:col-span-2 bg-white rounded-xl shadow-lg flex flex-col">
+            <!-- Chat Header -->
+            <div class="p-4 border-b border-gray-200 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-cnu-blue to-cnu-light rounded-full flex items-center justify-center">
+                        <i class="fas fa-heart text-white"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-semibold text-gray-900">AI 감정 동반자</h2>
+                        <p class="text-sm text-gray-500">실시간 감정 분석 활성화됨</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span class="text-sm text-gray-600">온라인</span>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-4" id="chatMessages">
+                <!-- AI Message -->
+                <div class="flex items-start space-x-3 chat-bubble">
+                    <div class="w-8 h-8 bg-cnu-blue rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-robot text-white text-sm"></i>
+                    </div>
+                    <div class="bg-gray-100 rounded-lg p-3 max-w-xs lg:max-w-md">
+                        <p class="text-gray-800" data-mock="true">안녕하세요! 오늘 기분은 어떠신가요? 저는 여러분의 마음을 이해하고 도움을 드리는 AI 동반자예요. 😊</p>
+                        <span class="text-xs text-gray-500 mt-1 block">방금 전</span>
+                    </div>
+                </div>
+
+                <!-- User Message -->
+                <div class="flex items-start space-x-3 justify-end chat-bubble">
+                    <div class="bg-cnu-blue text-white rounded-lg p-3 max-w-xs lg:max-w-md">
+                        <p data-mock="true">내일 발표가 있어서 너무 긴장되고 스트레스를 받고 있어요... 😰</p>
+                        <span class="text-xs text-blue-200 mt-1 block">1분 전</span>
+                    </div>
+                    <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-user text-gray-600 text-sm"></i>
+                    </div>
+                </div>
+
+                <!-- AI Response with Emotion Detection -->
+                <div class="flex items-start space-x-3 chat-bubble">
+                    <div class="w-8 h-8 bg-cnu-blue rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-robot text-white text-sm"></i>
+                    </div>
+                    <div class="bg-gray-100 rounded-lg p-3 max-w-xs lg:max-w-md">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <i class="fas fa-heartbeat text-emotion-anxiety text-sm"></i>
+                            <span class="text-xs font-medium text-emotion-anxiety">스트레스 감지됨</span>
+                        </div>
+                        <p class="text-gray-800" data-mock="true">발표 때문에 스트레스를 받고 계시는군요. 완전히 이해해요! 🤗 많은 유학생들이 같은 어려움을 겪고 있어요. 
+                        <br><br>지금 기분을 조금 더 나아지게 하기 위해 몇 가지 도움이 될 만한 곳을 추천해드릴게요. 오른쪽 대시보드를 확인해보세요!</p>
+                        <span class="text-xs text-gray-500 mt-1 block">방금 전</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Emotion Status Bar -->
+            <div class="p-4 border-t border-gray-200">
+                <div class="flex items-center space-x-4 mb-3">
+                    <span class="text-sm font-medium text-gray-700">현재 감정 상태</span>
+                    <div class="flex-1 flex items-center space-x-2">
+                        <div class="flex-1 bg-gray-200 rounded-full h-2">
+                            <div class="emotion-indicator bg-emotion-anxiety h-2 rounded-full" style="width: 65%"></div>
+                        </div>
+                        <span class="text-sm text-emotion-anxiety font-medium" data-bind="stressLevel">스트레스 65%</span>
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="flex items-center space-x-2">
+                    <div class="flex-1 relative">
+                        <input 
+                            type="text" 
+                            placeholder="마음을 편하게 털어놓아주세요..." 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cnu-blue focus:border-transparent"
+                            data-implementation="실시간 감정 분석 적용"
+                        />
+                        <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-cnu-blue">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                    <button class="bg-cnu-blue text-white p-2 rounded-lg hover:bg-blue-700 transition-colors" data-event="click:sendMessage">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: ChatInterface -->
+
+        <!-- @COMPONENT: SentimentDashboard -->
+        <div class="space-y-6">
+            <!-- Sentiment Analysis Card -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">실시간 감정 분석</h3>
+                    <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                </div>
+
+                <!-- Emotion Scores -->
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-fire text-emotion-stress"></i>
+                            <span class="text-sm font-medium">스트레스</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-20 bg-gray-200 rounded-full h-2">
+                                <div class="bg-emotion-stress h-2 rounded-full" style="width: 75%"></div>
+                            </div>
+                            <span class="text-sm font-semibold text-emotion-stress" data-bind="stressScore">75%</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-exclamation-triangle text-emotion-anxiety"></i>
+                            <span class="text-sm font-medium">불안</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-20 bg-gray-200 rounded-full h-2">
+                                <div class="bg-emotion-anxiety h-2 rounded-full" style="width: 60%"></div>
+                            </div>
+                            <span class="text-sm font-semibold text-emotion-anxiety" data-bind="anxietyScore">60%</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-smile text-emotion-joy"></i>
+                            <span class="text-sm font-medium">기쁨</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-20 bg-gray-200 rounded-full h-2">
+                                <div class="bg-emotion-joy h-2 rounded-full" style="width: 25%"></div>
+                            </div>
+                            <span class="text-sm font-semibold text-emotion-joy" data-bind="joyScore">25%</span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <i class="fas fa-cloud-rain text-emotion-depression"></i>
+                            <span class="text-sm font-medium">우울</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-20 bg-gray-200 rounded-full h-2">
+                                <div class="bg-emotion-depression h-2 rounded-full" style="width: 30%"></div>
+                            </div>
+                            <span class="text-sm font-semibold text-emotion-depression" data-bind="depressionScore">30%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emotion Trend Chart -->
+                <div class="mt-6">
+                    <h4 class="text-sm font-medium text-gray-700 mb-3">지난 24시간 감정 변화</h4>
+                    <div class="h-20 bg-gray-100 rounded-lg flex items-end justify-between p-2" data-implementation="Chart.js 또는 D3.js로 실제 차트 구현">
+                        <!-- Mock Chart Bars -->
+                        <div class="w-2 bg-emotion-joy rounded-t" style="height: 30%"></div>
+                        <div class="w-2 bg-emotion-joy rounded-t" style="height: 45%"></div>
+                        <div class="w-2 bg-emotion-anxiety rounded-t" style="height: 60%"></div>
+                        <div class="w-2 bg-emotion-stress rounded-t" style="height: 80%"></div>
+                        <div class="w-2 bg-emotion-stress rounded-t" style="height: 85%"></div>
+                        <div class="w-2 bg-emotion-anxiety rounded-t" style="height: 70%"></div>
+                        <div class="w-2 bg-emotion-anxiety rounded-t" style="height: 75%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Auto Recommendations -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center space-x-2 mb-4">
+                    <i class="fas fa-magic text-cnu-blue"></i>
+                    <h3 class="text-lg font-semibold text-gray-900">맞춤 추천</h3>
+                    <span class="bg-red-100 text-red-600 text-xs font-medium px-2 py-1 rounded-full">긴급</span>
+                </div>
+
+                <!-- @MAP: recommendations.map(rec => ( -->
+                <div class="space-y-3">
+                    <!-- Healing Board Recommendation -->
+                    <div class="border-l-4 border-emotion-stress bg-red-50 p-4 rounded-r-lg cursor-pointer hover:bg-red-100 transition-colors" data-event="click:openHealingBoard">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-8 h-8 bg-emotion-stress rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-heart text-white text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-gray-900">힐링 게시판</h4>
+                                <p class="text-sm text-gray-600 mt-1" data-mock="true">높은 스트레스가 감지되었습니다. 다른 학생들과 마음을 나누어 보세요.</p>
+                                <span class="text-xs text-emotion-stress font-medium mt-2 block">지금 바로 방문 →</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mentoring Session Recommendation -->
+                    <div class="border-l-4 border-emotion-anxiety bg-yellow-50 p-4 rounded-r-lg cursor-pointer hover:bg-yellow-100 transition-colors" data-event="click:openMentoringSession">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-8 h-8 bg-emotion-anxiety rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-user-friends text-white text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-gray-900">1:1 멘토링 세션</h4>
+                                <p class="text-sm text-gray-600 mt-1" data-mock="true">발표 불안감 해소를 위한 선배 멘토와의 상담을 추천드려요.</p>
+                                <span class="text-xs text-emotion-anxiety font-medium mt-2 block">예약하기 →</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Study Help Board -->
+                    <div class="border-l-4 border-cnu-blue bg-blue-50 p-4 rounded-r-lg cursor-pointer hover:bg-blue-100 transition-colors" data-event="click:openStudyHelpBoard">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-8 h-8 bg-cnu-blue rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-graduation-cap text-white text-sm"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-gray-900">학습 도움 게시판</h4>
+                                <p class="text-sm text-gray-600 mt-1" data-mock="true">발표 스킬 향상을 위한 학습 자료와 팁을 확인해보세요.</p>
+                                <span class="text-xs text-cnu-blue font-medium mt-2 block">자료 보기 →</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_MAP )) -->
+            </div>
+
+            <!-- Crisis Alert -->
+            <div class="bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl p-6 shadow-lg" data-implementation="위기 상황 감지 시에만 표시">
+                <div class="flex items-center space-x-2 mb-3">
+                    <i class="fas fa-exclamation-triangle text-xl animate-pulse"></i>
+                    <h3 class="text-lg font-semibold">긴급 지원</h3>
+                </div>
+                <p class="text-sm mb-4" data-mock="true">심각한 스트레스 수준이 감지되었습니다. 전문 상담사와 즉시 연결하시겠습니까?</p>
+                <div class="flex space-x-2">
+                    <button class="bg-white text-red-600 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-100 transition-colors" data-event="click:connectCounselor">
+                        상담센터 연결
+                    </button>
+                    <button class="bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-800 transition-colors" data-event="click:dismissAlert">
+                        괜찮습니다
+                    </button>
+                </div>
+            </div>
+
+            <!-- Support Resources -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">추가 지원 리소스</h3>
+                <div class="space-y-3">
+                    <a href="#" class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors" data-event="click:openCounselingCenter">
+                        <i class="fas fa-phone text-cnu-blue"></i>
+                        <div>
+                            <p class="font-medium text-gray-900">학생상담센터</p>
+                            <p class="text-sm text-gray-500">042-821-5070</p>
+                        </div>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors" data-event="click:openInternationalAffairs">
+                        <i class="fas fa-globe text-cnu-blue"></i>
+                        <div>
+                            <p class="font-medium text-gray-900">국제교류본부</p>
+                            <p class="text-sm text-gray-500">유학생 전용 지원</p>
+                        </div>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors" data-event="click:openEmergencyHelp">
+                        <i class="fas fa-ambulance text-red-500"></i>
+                        <div>
+                            <p class="font-medium text-gray-900">24시간 위기상담</p>
+                            <p class="text-sm text-gray-500">1393 (생명의전화)</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: SentimentDashboard -->
+    </div>
+
+    <!-- @STATE: chatMessages:array = [], currentEmotion:string = "안정", emotionScores:object = {} -->
+
+    <script>
+        // TODO: 실제 구현 시 Socket.io 또는 WebSocket 사용
+        (function() {
+            // 실시간 감정 분석 시뮬레이션
+            function updateEmotionScores() {
+                // TODO: 실제 mBERT + 감정 BERT 모델 API 연동
+                const mockScores = {
+                    stress: Math.random() * 100,
+                    anxiety: Math.random() * 100,
+                    joy: Math.random() * 100,
+                    depression: Math.random() * 100
+                };
+                
+                console.log('Emotion scores updated:', mockScores);
+            }
+
+            // 자동 추천 시스템
+            function triggerAutoRecommendations(emotionScores) {
+                // TODO: Sentiment-Match 엔진 로직 구현
+                if (emotionScores.stress > 70) {
+                    console.log('High stress detected - recommending healing board');
+                }
+                if (emotionScores.anxiety > 60) {
+                    console.log('High anxiety detected - recommending mentoring session');
+                }
+            }
+
+            // 위기 상황 감지
+            function detectCrisis(emotionScores) {
+                // TODO: 실제 위기 감지 알고리즘 구현
+                const totalNegative = emotionScores.stress + emotionScores.anxiety + emotionScores.depression;
+                if (totalNegative > 200) {
+                    console.log('Crisis situation detected - alerting counseling center');
+                }
+            }
+
+            // 채팅 메시지 전송
+            function sendMessage(message) {
+                // TODO: FastAPI 백엔드와 통신
+                console.log('Sending message:', message);
+                updateEmotionScores();
+            }
+
+            // 언어 변경
+            function changeLanguage(language) {
+                // TODO: 다국어 지원 구현
+                console.log('Language changed to:', language);
+            }
+
+            // 모바일 반응형 처리
+            function handleMobileLayout() {
+                const sidebar = document.querySelector('.lg\\:col-span-1');
+                const chatArea = document.querySelector('.lg\\:col-span-2');
+                
+                if (window.innerWidth < 1024) {
+                    // 모바일에서 사이드바 토글 기능
+                    console.log('Mobile layout activated');
+                }
+            }
+
+            // 초기화
+            window.addEventListener('resize', handleMobileLayout);
+            handleMobileLayout();
+            
+            // 실시간 업데이트 시뮬레이션
+            setInterval(updateEmotionScores, 5000);
+        })();
+    </script>
+</body>
+</html>

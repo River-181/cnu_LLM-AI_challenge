@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniBuddy - AI 강의 리포맷터</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'noto': ['Noto Sans KR', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif']
+                    },
+                    colors: {
+                        'primary': '#4285F4',
+                        'secondary': '#FF9800',
+                        'accent-red': '#F44336',
+                        'accent-blue': '#2196F3',
+                        'surface': '#FFFFFF',
+                        'text-primary': '#333333',
+                        'text-secondary': '#666666',
+                        'text-muted': '#999999'
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+        }
+        
+        .file-upload-area {
+            border: 2px dashed #E0E7FF;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload-area:hover {
+            border-color: #4285F4;
+            background-color: #F8FAFF;
+        }
+        
+        .lecture-item {
+            transition: all 0.2s ease;
+        }
+        
+        .lecture-item:hover {
+            background-color: #F8FAFF;
+            transform: translateY(-1px);
+        }
+        
+        .btn-file-type {
+            transition: all 0.2s ease;
+        }
+        
+        .btn-file-type:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body class="font-noto bg-gray-50 min-h-screen">
+    <!-- @COMPONENT: MainLayout -->
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- @COMPONENT: LeftSidebar -->
+        <!-- Left Sidebar - Lecture List -->
+        <div class="w-60 bg-white border-r border-gray-200 flex flex-col">
+            <!-- Sidebar Header -->
+            <div class="p-4 border-b border-gray-100">
+                <h2 class="text-lg font-semibold text-text-primary mb-3">강의 자료 목록</h2>
+                
+                <!-- Search Bar -->
+                <div class="relative mb-3">
+                    <input type="text" placeholder="강의 자료 검색" 
+                           class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                           data-mock="true">
+                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
+                
+                <!-- Filter Dropdown -->
+                <select class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm" data-mock="true">
+                    <option>강의별</option>
+                    <option>날짜별</option>
+                    <option>파일 형식별</option>
+                </select>
+            </div>
+            
+            <!-- Lecture List -->
+            <div class="flex-1 overflow-y-auto p-2">
+                <!-- @MAP: lectures.map(lecture => ( -->
+                <div class="lecture-item p-3 rounded-lg cursor-pointer mb-2" data-bind="lecture.isActive ? 'bg-blue-50 border-l-4 border-primary' : ''">
+                    <div class="flex items-center space-x-3">
+                        <div class="text-xl">📘</div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm font-medium text-text-primary truncate" data-bind="lecture.title">데이터베이스 개론</span>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                            </div>
+                            <div class="text-xs text-text-muted" data-bind="lecture.date">2024.03.15</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lecture-item p-3 rounded-lg cursor-pointer mb-2">
+                    <div class="flex items-center space-x-3">
+                        <div class="text-xl">📗</div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm font-medium text-text-primary truncate">운영체제</span>
+                                <span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">진행중</span>
+                            </div>
+                            <div class="text-xs text-text-muted">2024.03.20</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lecture-item p-3 rounded-lg cursor-pointer mb-2">
+                    <div class="flex items-center space-x-3">
+                        <div class="text-xl">📙</div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm font-medium text-text-primary truncate">통계학개론 개론</span>
+                                <i class="fas fa-star text-yellow-400 text-xs"></i>
+                            </div>
+                            <div class="text-xs text-text-muted">2024.03.15</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_MAP )) -->
+            </div>
+        </div>
+        <!-- @END_COMPONENT: LeftSidebar -->
+        
+        <!-- @COMPONENT: MainContent -->
+        <!-- Center Main Area - File Upload -->
+        <div class="flex-1 flex flex-col bg-white">
+            <!-- Main Content -->
+            <div class="flex-1 flex items-center justify-center p-8">
+                <div class="max-w-lg w-full text-center">
+                    
+                    <!-- Upload Area -->
+                    <div class="file-upload-area rounded-2xl p-12 mb-6 bg-gray-50">
+                        <!-- Cloud Icon -->
+                        <div class="mb-6">
+                            <div class="w-16 h-16 mx-auto bg-primary rounded-full flex items-center justify-center">
+                                <i class="fas fa-cloud-upload-alt text-white text-2xl"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Upload Message -->
+                        <h3 class="text-lg font-medium text-text-primary mb-2">강의 자료를 업로드해주세요</h3>
+                        <p class="text-sm text-text-secondary mb-6">PDF, PPT, DOCX 등의 파일을 (최대 5MB, WAV 등 첨부 가능)</p>
+                        
+                        <!-- File Type Buttons -->
+                        <div class="flex justify-center space-x-4 mb-6">
+                            <button class="btn-file-type px-4 py-2 rounded-lg text-white font-medium text-sm bg-accent-red hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-200" data-event="click:handlePDFUpload">
+                                <i class="fas fa-file-pdf mr-2"></i>PDF
+                            </button>
+                            <button class="btn-file-type px-4 py-2 rounded-lg text-white font-medium text-sm bg-secondary hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-200" data-event="click:handlePPTUpload">
+                                <i class="fas fa-file-powerpoint mr-2"></i>PPT
+                            </button>
+                            <button class="btn-file-type px-4 py-2 rounded-lg text-white font-medium text-sm bg-accent-blue hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-200" data-event="click:handleDOCXUpload">
+                                <i class="fas fa-file-word mr-2"></i>DOCX
+                            </button>
+                        </div>
+                        
+                        <!-- Drag & Drop Area -->
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 bg-white" data-implementation="Implement drag and drop file upload functionality">
+                            <p class="text-sm text-text-muted">또는 파일을 여기로 끌어다 놓으세요</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Upload Button -->
+                    <button class="w-full bg-secondary hover:bg-orange-600 text-white font-medium py-3 px-6 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-orange-200" data-event="click:handleUpload">
+                        <i class="fas fa-upload mr-2"></i>강의 업로드
+                    </button>
+                    
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: MainContent -->
+        
+        <!-- @COMPONENT: RightPanel -->
+        <!-- Right Panel - Content Display -->
+        <div class="w-80 bg-white border-l border-gray-200 flex flex-col">
+            <!-- Panel Header -->
+            <div class="p-4 border-b border-gray-100">
+                <h3 class="text-lg font-semibold text-text-primary mb-2">데이터베이스 개론 - 3주차</h3>
+                
+                <!-- Language Tabs -->
+                <div class="flex space-x-1 bg-gray-100 rounded-lg p-1">
+                    <button class="flex-1 py-2 px-3 text-xs font-medium rounded-md bg-white text-primary shadow-sm" data-bind="activeLanguage === 'ko'">한국어</button>
+                    <button class="flex-1 py-2 px-3 text-xs font-medium rounded-md text-text-muted hover:text-text-primary" data-bind="activeLanguage === 'en'">English</button>
+                    <button class="flex-1 py-2 px-3 text-xs font-medium rounded-md text-text-muted hover:text-text-primary" data-bind="activeLanguage === 'zh'">中文</button>
+                </div>
+            </div>
+            
+            <!-- Content Area -->
+            <div class="flex-1 overflow-y-auto p-4">
+                <div class="space-y-4" data-mock="true">
+                    <div class="text-sm text-text-primary leading-relaxed">
+                        <p class="mb-3">강의 내용이 실시간으로 분석되고 재구성되어 표시됩니다. 다음 기능들이 제공됩니다:</p>
+                        
+                        <div class="space-y-2">
+                            <div class="flex items-start space-x-2">
+                                <i class="fas fa-check-circle text-green-500 mt-1 text-xs"></i>
+                                <span>용어 사전 및 해설</span>
+                            </div>
+                            <div class="flex items-start space-x-2">
+                                <i class="fas fa-check-circle text-green-500 mt-1 text-xs"></i>
+                                <span>핵심 내용 요약</span>
+                            </div>
+                            <div class="flex items-start space-x-2">
+                                <i class="fas fa-check-circle text-green-500 mt-1 text-xs"></i>
+                                <span>배경 지식 카드</span>
+                            </div>
+                            <div class="flex items-start space-x-2">
+                                <i class="fas fa-check-circle text-green-500 mt-1 text-xs"></i>
+                                <span>자동 생성 퀴즈</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 p-3 bg-blue-50 rounded-lg">
+                            <p class="text-sm text-text-secondary">
+                                <i class="fas fa-info-circle text-primary mr-2"></i>
+                                강의 자료를 업로드하면 AI가 자동으로 분석하여 이해하기 쉬운 형태로 재구성합니다.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="p-4 border-t border-gray-100 space-y-2">
+                <button class="w-full bg-gray-100 hover:bg-gray-200 text-text-primary font-medium py-2 px-4 rounded-lg transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-gray-300" data-event="click:handlePDFExport">
+                    <i class="fas fa-file-pdf mr-2 text-red-500"></i>PDF 내보내기
+                </button>
+                <button class="w-full bg-primary hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" data-event="click:handleAskQuestion">
+                    <i class="fas fa-question-circle mr-2"></i>질문하기
+                </button>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: RightPanel -->
+        
+    </div>
+    <!-- @END_COMPONENT: MainLayout -->
+    
+    <!-- @COMPONENT: FileUploadModal -->
+    <!-- Hidden file upload modal for processing -->
+    <div id="uploadModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50" data-mock="true">
+        <div class="bg-white rounded-lg p-6 w-96">
+            <h3 class="text-lg font-semibold mb-4">파일 업로드 중...</h3>
+            <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                <div class="bg-primary h-2 rounded-full transition-all duration-300" style="width: 45%" data-bind="uploadProgress"></div>
+            </div>
+            <p class="text-sm text-text-secondary">AI가 강의 자료를 분석하고 있습니다.</p>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: FileUploadModal -->
+    
+    <script>
+        // TODO: Implement file upload functionality
+        // TODO: Implement drag and drop handlers
+        // TODO: Implement language switching
+        // TODO: Implement AI processing and content display
+        // TODO: Implement PDF export functionality
+        // TODO: Implement question asking feature
+        
+        (function() {
+            // File upload handlers
+            const handleFileUpload = (fileType) => {
+                console.log(`Uploading ${fileType} file...`);
+                // Show upload modal and progress
+                document.getElementById('uploadModal').classList.remove('hidden');
+                // Simulate upload progress
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 10;
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        document.getElementById('uploadModal').classList.add('hidden');
+                        // Show processed content
+                    }
+                }, 200);
+            };
+            
+            // Language switching
+            const switchLanguage = (lang) => {
+                console.log(`Switching to ${lang} language`);
+                // Update content based on selected language
+            };
+            
+            // Export functionality
+            const exportToPDF = () => {
+                console.log('Exporting to PDF...');
+                // Generate and download PDF
+            };
+            
+            // Question asking
+            const askQuestion = () => {
+                console.log('Opening question interface...');
+                // Open chat or question modal
+            };
+        })();
+    </script>
+</body>
+</html>

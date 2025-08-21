@@ -1,0 +1,481 @@
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniBuddy - 교수 소통 헬퍼</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cnu-blue': '#2D5AA0',
+                        'cnu-light': '#E8F2FF',
+                        'cnu-orange': '#FF9500',
+                        'cnu-success': '#10B981',
+                        'cnu-bg': '#FAFBFC'
+                    },
+                    fontFamily: {
+                        'noto': ['Noto Sans KR', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-cnu-bg font-noto text-gray-900">
+    <!-- @COMPONENT: Header -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-cnu-blue rounded-full flex items-center justify-center">
+                        <i class="fas fa-graduation-cap text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-cnu-blue">UniBuddy</h1>
+                        <p class="text-sm text-gray-600">Chungnam National University</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-cnu-blue focus:border-transparent">
+                        <option>한국어</option>
+                        <option>English</option>
+                        <option>中文</option>
+                    </select>
+                    <div class="w-8 h-8 bg-cnu-orange rounded-full flex items-center justify-center">
+                        <i class="fas fa-user text-white text-sm"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- @END_COMPONENT: Header -->
+
+    <!-- @COMPONENT: MainContainer -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- @COMPONENT: PageHeader -->
+        <div class="mb-8">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-cnu-blue to-blue-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-comments text-white text-xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">교수 소통 헬퍼</h2>
+                    <p class="text-gray-600">한국 대학 문화에 맞는 소통 방식을 학습하세요</p>
+                </div>
+            </div>
+            
+            <!-- Progress Indicator -->
+            <div class="bg-white rounded-lg p-4 shadow-sm border border-gray-200">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-sm font-medium text-gray-700">학습 진도</span>
+                    <span class="text-sm text-cnu-blue font-semibold">67%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div class="bg-gradient-to-r from-cnu-blue to-blue-500 h-2 rounded-full" style="width: 67%"></div>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: PageHeader -->
+
+        <!-- @COMPONENT: TabNavigation -->
+        <div class="mb-8">
+            <div class="border-b border-gray-200">
+                <nav class="flex space-x-8">
+                    <button class="py-4 px-1 border-b-2 border-cnu-blue font-medium text-sm text-cnu-blue">
+                        <i class="fas fa-language mr-2"></i>
+                        문화 맥락 번역
+                    </button>
+                    <button class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                        <i class="fas fa-envelope mr-2"></i>
+                        이메일 템플릿
+                    </button>
+                    <button class="py-4 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
+                        <i class="fas fa-microphone mr-2"></i>
+                        발표 스크립트
+                    </button>
+                </nav>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: TabNavigation -->
+
+        <!-- @COMPONENT: MainContent -->
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-8">
+            
+            <!-- @COMPONENT: InputSection -->
+            <div class="lg:col-span-3">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900">직설적 표현 입력</h3>
+                        <div class="flex items-center space-x-2">
+                            <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-cnu-blue focus:border-transparent">
+                                <option>영어 → 한국어</option>
+                                <option>중국어 → 한국어</option>
+                                <option>일본어 → 한국어</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <textarea 
+                            class="w-full h-32 border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-cnu-blue focus:border-transparent resize-none"
+                            placeholder="예: 교수님, 제 의견은 틀렸다고 생각해요"
+                            data-mock="true">교수님, 제 의견은 틀렸다고 생각해요</textarea>
+                        
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">존댓말 수준</label>
+                                    <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-cnu-blue focus:border-transparent">
+                                        <option>격식체 (높음)</option>
+                                        <option>일반 존댓말</option>
+                                        <option>친근한 존댓말</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">상황</label>
+                                    <select class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-cnu-blue focus:border-transparent">
+                                        <option>수업 중 질문</option>
+                                        <option>이메일 문의</option>
+                                        <option>개별 면담</option>
+                                        <option>발표 후 토론</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button class="bg-cnu-blue text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                                <i class="fas fa-magic mr-2"></i>
+                                변환하기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- @COMPONENT: ExampleSuggestions -->
+                <div class="mt-6 bg-cnu-light rounded-xl p-4">
+                    <h4 class="font-medium text-cnu-blue mb-3">
+                        <i class="fas fa-lightbulb mr-2"></i>
+                        표현 예시
+                    </h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <button class="text-left p-3 bg-white rounded-lg hover:shadow-sm border border-blue-200 transition-all">
+                            <p class="text-sm text-gray-600">직설적</p>
+                            <p class="text-sm font-medium">"이 문제가 어려워요"</p>
+                        </button>
+                        <button class="text-left p-3 bg-white rounded-lg hover:shadow-sm border border-blue-200 transition-all">
+                            <p class="text-sm text-gray-600">직설적</p>
+                            <p class="text-sm font-medium">"과제를 늦게 제출해도 될까요?"</p>
+                        </button>
+                        <button class="text-left p-3 bg-white rounded-lg hover:shadow-sm border border-blue-200 transition-all">
+                            <p class="text-sm text-gray-600">직설적</p>
+                            <p class="text-sm font-medium">"다른 의견이 있어요"</p>
+                        </button>
+                        <button class="text-left p-3 bg-white rounded-lg hover:shadow-sm border border-blue-200 transition-all">
+                            <p class="text-sm text-gray-600">직설적</p>
+                            <p class="text-sm font-medium">"설명을 다시 해주세요"</p>
+                        </button>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: ExampleSuggestions -->
+            </div>
+            <!-- @END_COMPONENT: InputSection -->
+
+            <!-- @COMPONENT: OutputSection -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900">한국 문화적 완곡 표현</h3>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-cnu-success text-white text-xs px-2 py-1 rounded-full">적절함</span>
+                            <button class="text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <p class="text-gray-900 font-medium mb-2" data-mock="true">
+                                "교수님, 제가 생각하기로는 다른 관점도 있을 것 같습니다. 혹시 이 부분에 대해 더 설명해 주실 수 있을까요?"
+                            </p>
+                            <div class="flex items-center space-x-4 text-sm text-gray-600">
+                                <span>
+                                    <i class="fas fa-chart-line mr-1 text-cnu-success"></i>
+                                    정중함: 높음
+                                </span>
+                                <span>
+                                    <i class="fas fa-university mr-1 text-cnu-blue"></i>
+                                    문화 적합성: 우수
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- @COMPONENT: ComparisonAnalysis -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h4 class="font-medium text-gray-900 mb-3">
+                                <i class="fas fa-analytics mr-2 text-cnu-blue"></i>
+                                변환 분석
+                            </h4>
+                            <div class="space-y-3">
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-sm text-gray-600">존댓말 수준</span>
+                                        <span class="text-sm font-medium text-cnu-blue">격식체</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-cnu-blue h-2 rounded-full" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-sm text-gray-600">간접성</span>
+                                        <span class="text-sm font-medium text-cnu-success">높음</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-cnu-success h-2 rounded-full" style="width: 90%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-sm text-gray-600">문화 적합성</span>
+                                        <span class="text-sm font-medium text-cnu-orange">우수</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-cnu-orange h-2 rounded-full" style="width: 92%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- @END_COMPONENT: ComparisonAnalysis -->
+
+                        <!-- @COMPONENT: AlternativeExpressions -->
+                        <div class="space-y-2">
+                            <h4 class="font-medium text-gray-900">
+                                <i class="fas fa-list-alt mr-2 text-cnu-blue"></i>
+                                대안 표현
+                            </h4>
+                            <div class="space-y-2">
+                                <div class="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                    <p class="text-sm" data-mock="true">"교수님, 이 부분에 대해 조금 다른 시각으로 접근해볼 수 있을까요?"</p>
+                                    <span class="text-xs text-gray-500">더 정중한 표현</span>
+                                </div>
+                                <div class="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                    <p class="text-sm" data-mock="true">"혹시 이런 관점에서는 어떻게 생각하시는지 궁금합니다"</p>
+                                    <span class="text-xs text-gray-500">질문형 표현</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- @END_COMPONENT: AlternativeExpressions -->
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: OutputSection -->
+        </div>
+        <!-- @END_COMPONENT: MainContent -->
+
+        <!-- @COMPONENT: ResourcesSection -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <!-- @COMPONENT: PresentationGuide -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
+                        <i class="fas fa-presentation text-purple-600"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900">한국식 발표 매너 가이드</h3>
+                </div>
+                <div class="space-y-3">
+                    <div class="p-3 bg-purple-50 rounded-lg">
+                        <h4 class="font-medium text-purple-900 mb-1">시작 멘트</h4>
+                        <p class="text-sm text-purple-800" data-mock="true">"안녕하세요, [이름]입니다. 오늘 [주제]에 대해 발표하게 되어 영광입니다."</p>
+                    </div>
+                    <div class="p-3 bg-purple-50 rounded-lg">
+                        <h4 class="font-medium text-purple-900 mb-1">질문 받기</h4>
+                        <p class="text-sm text-purple-800" data-mock="true">"혹시 질문이나 의견이 있으시면 언제든지 말씀해 주세요."</p>
+                    </div>
+                    <div class="p-3 bg-purple-50 rounded-lg">
+                        <h4 class="font-medium text-purple-900 mb-1">마무리 멘트</h4>
+                        <p class="text-sm text-purple-800" data-mock="true">"경청해 주셔서 감사합니다. 부족한 발표였지만 도움이 되었기를 바랍니다."</p>
+                    </div>
+                </div>
+                <button class="w-full mt-4 bg-purple-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-purple-700 transition-colors">
+                    전체 가이드 보기
+                </button>
+            </div>
+            <!-- @END_COMPONENT: PresentationGuide -->
+
+            <!-- @COMPONENT: ProfessorCommunication -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                        <i class="fas fa-chalkboard-teacher text-green-600"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900">교수 소통 방식 팁</h3>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i class="fas fa-check text-green-600 text-xs"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-900">이메일 예절</h4>
+                            <p class="text-sm text-gray-600" data-mock="true">제목에 [과목명]과 학번 포함하기</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i class="fas fa-check text-green-600 text-xs"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-900">면담 요청</h4>
+                            <p class="text-sm text-gray-600" data-mock="true">최소 2-3일 전 미리 약속 잡기</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-3">
+                        <div class="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <i class="fas fa-check text-green-600 text-xs"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium text-gray-900">수업 중 예절</h4>
+                            <p class="text-sm text-gray-600" data-mock="true">손 들고 허락 받은 후 발언하기</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="w-full mt-4 bg-green-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-green-700 transition-colors">
+                    상세 가이드 보기
+                </button>
+            </div>
+            <!-- @END_COMPONENT: ProfessorCommunication -->
+
+            <!-- @COMPONENT: ExpressionDictionary -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center mr-3">
+                        <i class="fas fa-book text-orange-600"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900">20대 대학생 표현 사전</h3>
+                </div>
+                <div class="space-y-3">
+                    <div class="p-3 bg-orange-50 rounded-lg">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-sm font-medium text-orange-900">동의 표현</span>
+                            <i class="fas fa-thumbs-up text-orange-600 text-xs"></i>
+                        </div>
+                        <p class="text-sm text-orange-800" data-mock="true">"맞습니다", "그렇게 생각해요", "공감합니다"</p>
+                    </div>
+                    <div class="p-3 bg-orange-50 rounded-lg">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-sm font-medium text-orange-900">반대 의견</span>
+                            <i class="fas fa-comment-dots text-orange-600 text-xs"></i>
+                        </div>
+                        <p class="text-sm text-orange-800" data-mock="true">"다른 관점에서는...", "조금 다르게 생각하는데요"</p>
+                    </div>
+                    <div class="p-3 bg-orange-50 rounded-lg">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-sm font-medium text-orange-900">질문하기</span>
+                            <i class="fas fa-question-circle text-orange-600 text-xs"></i>
+                        </div>
+                        <p class="text-sm text-orange-800" data-mock="true">"혹시...", "궁금한 게 있는데요", "질문이 있습니다"</p>
+                    </div>
+                </div>
+                <button class="w-full mt-4 bg-orange-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-orange-700 transition-colors">
+                    전체 사전 보기
+                </button>
+            </div>
+            <!-- @END_COMPONENT: ExpressionDictionary -->
+        </div>
+        <!-- @END_COMPONENT: ResourcesSection -->
+
+        <!-- @COMPONENT: RecentActivity -->
+        <div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">
+                    <i class="fas fa-history mr-2 text-cnu-blue"></i>
+                    최근 학습 기록
+                </h3>
+                <button class="text-cnu-blue hover:text-blue-700 text-sm font-medium">
+                    전체 보기
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- @MAP: recentActivities.map(activity => ( -->
+                <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                    <div class="w-8 h-8 bg-cnu-blue rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-language text-white text-xs"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-medium text-gray-900" data-mock="true">문화 맥락 번역</p>
+                        <p class="text-xs text-gray-500" data-mock="true">2시간 전 • 이메일 작성</p>
+                    </div>
+                </div>
+                <!-- @END_MAP )) -->
+                <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                    <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-microphone text-white text-xs"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-medium text-gray-900" data-mock="true">발표 스크립트</p>
+                        <p class="text-xs text-gray-500" data-mock="true">어제 • 중간발표 준비</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                    <div class="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-envelope text-white text-xs"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-medium text-gray-900" data-mock="true">이메일 템플릿</p>
+                        <p class="text-xs text-gray-500" data-mock="true">3일 전 • 과제 문의</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: RecentActivity -->
+    </div>
+    <!-- @END_COMPONENT: MainContainer -->
+
+    <!-- @COMPONENT: FloatingActionButton -->
+    <div class="fixed bottom-6 right-6">
+        <button class="w-14 h-14 bg-cnu-blue text-white rounded-full shadow-lg hover:bg-blue-700 transition-all duration-300 hover:scale-110">
+            <i class="fas fa-question-circle text-xl"></i>
+        </button>
+    </div>
+    <!-- @END_COMPONENT: FloatingActionButton -->
+
+    <script>
+        // TODO: Implement tab switching functionality
+        (function() {
+            const tabButtons = document.querySelectorAll('nav button');
+            const exampleButtons = document.querySelectorAll('[data-mock="true"]');
+            
+            // TODO: Add tab switching logic
+            // TODO: Add example text insertion logic
+            // TODO: Add translation API integration
+            // TODO: Add copy to clipboard functionality
+            // TODO: Add real-time cultural analysis
+            
+            // Basic interaction handlers (for demo purposes only)
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // TODO: Implement actual tab switching
+                    console.log('Tab clicked:', this.textContent.trim());
+                });
+            });
+            
+            exampleButtons.forEach(button => {
+                if (button.tagName === 'BUTTON') {
+                    button.addEventListener('click', function() {
+                        // TODO: Insert example text into input
+                        console.log('Example clicked:', this.textContent.trim());
+                    });
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

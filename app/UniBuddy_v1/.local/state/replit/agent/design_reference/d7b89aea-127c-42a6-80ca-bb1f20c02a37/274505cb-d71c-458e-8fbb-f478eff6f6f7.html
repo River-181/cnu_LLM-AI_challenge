@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniBuddy Dashboard - Chungnam National University</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    'cnu-blue': '#1e40af',
+                    'cnu-light': '#e0f2fe',
+                }
+            },
+            fontFamily: {
+                'inter': ['Inter', 'system-ui', 'sans-serif'],
+            }
+        }
+    };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        .sidebar-transition {
+            transition: transform 0.3s ease;
+        }
+        @media (max-width: 768px) {
+            .sidebar-hidden {
+                transform: translateX(-100%);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-inter">
+    <!-- @COMPONENT: MobileMenuOverlay -->
+    <div id="mobileMenuOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden md:hidden"></div>
+    <!-- @END_COMPONENT: MobileMenuOverlay -->
+
+    <!-- @COMPONENT: Sidebar -->
+    <div id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-white shadow-lg z-50 sidebar-transition md:translate-x-0 sidebar-hidden">
+        <div class="p-6 border-b border-gray-200">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-cnu-blue rounded-full flex items-center justify-center">
+                    <i class="fas fa-graduation-cap text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-gray-900">UniBuddy</h1>
+                    <p class="text-sm text-gray-500">CNU AI Assistant</p>
+                </div>
+            </div>
+        </div>
+
+        <nav class="p-4">
+            <ul class="space-y-2">
+                <li>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-lg bg-cnu-light text-cnu-blue">
+                        <i class="fas fa-home w-5"></i>
+                        <span class="font-medium">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-book w-5"></i>
+                        <span>Lecture Reformatter</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-heart w-5"></i>
+                        <span>Heart Translator</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-envelope w-5"></i>
+                        <span>Communication Helper</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-chart-line w-5"></i>
+                        <span>Progress</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center space-x-3 px-4 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-cog w-5"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
+            <div class="flex items-center space-x-3">
+                <!-- Student profile photo placeholder -->
+                <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-medium text-gray-900 truncate" data-bind="user.name">김민수</p>
+                    <p class="text-xs text-gray-500">Computer Science</p>
+                </div>
+                <button class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: Sidebar -->
+
+    <!-- @COMPONENT: MainContent -->
+    <div class="md:ml-64">
+        <!-- @COMPONENT: TopHeader -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center">
+                        <button id="mobileMenuBtn" class="md:hidden p-2 rounded-md text-gray-400 hover:text-gray-500">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                        <h1 class="ml-2 md:ml-0 text-2xl font-bold text-gray-900">Dashboard</h1>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <!-- Language Switcher -->
+                        <div class="relative">
+                            <select class="bg-white border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cnu-blue focus:border-transparent" data-bind="user.language">
+                                <option value="ko">한국어</option>
+                                <option value="en">English</option>
+                                <option value="zh">中文</option>
+                            </select>
+                        </div>
+
+                        <!-- Notifications -->
+                        <button class="relative p-2 text-gray-400 hover:text-gray-500">
+                            <i class="fas fa-bell text-xl"></i>
+                            <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400 ring-2 ring-white"></span>
+                        </button>
+
+                        <!-- Profile Dropdown -->
+                        <div class="relative">
+                            <button class="flex items-center space-x-2 text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-cnu-blue">
+                                <div class="w-8 h-8 bg-gray-300 rounded-full"></div>
+                                <span class="hidden md:block text-gray-700 font-medium" data-bind="user.name">김민수</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- @END_COMPONENT: TopHeader -->
+
+        <!-- @COMPONENT: DashboardContent -->
+        <main class="p-4 sm:p-6 lg:p-8">
+            <!-- Welcome Section -->
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-2">Welcome back, <span data-bind="user.name">김민수</span>!</h2>
+                <p class="text-gray-600">Here's what's happening with your learning journey today.</p>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-blue-100 rounded-lg">
+                            <i class="fas fa-book text-blue-600 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Lectures Processed</p>
+                            <p class="text-2xl font-bold text-gray-900" data-bind="stats.lecturesProcessed">23</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-green-100 rounded-lg">
+                            <i class="fas fa-comments text-green-600 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Chat Sessions</p>
+                            <p class="text-2xl font-bold text-gray-900" data-bind="stats.chatSessions">47</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-orange-100 rounded-lg">
+                            <i class="fas fa-envelope text-orange-600 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Templates Created</p>
+                            <p class="text-2xl font-bold text-gray-900" data-bind="stats.templatesCreated">12</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-purple-100 rounded-lg">
+                            <i class="fas fa-chart-line text-purple-600 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-sm font-medium text-gray-600">Learning Progress</p>
+                            <p class="text-2xl font-bold text-gray-900">78%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Feature Cards -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                <!-- F1: AI Lecture Reformatter -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 card-hover cursor-pointer">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 bg-blue-100 rounded-lg">
+                                <i class="fas fa-file-alt text-blue-600 text-2xl"></i>
+                            </div>
+                            <span class="text-sm text-gray-500">#F1</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">AI 강의 리포맷터</h3>
+                        <p class="text-gray-600 mb-4">Upload lecture materials for AI-powered summarization, terminology explanations, and quiz generation.</p>
+                        
+                        <div class="space-y-3 mb-6">
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-600">Recent uploads</span>
+                                <span class="font-medium text-gray-900" data-bind="f1.recentUploads">5 files</span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-600">Quizzes generated</span>
+                                <span class="font-medium text-gray-900" data-bind="f1.quizzesGenerated">12</span>
+                            </div>
+                        </div>
+
+                        <button class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors" data-event="click:navigateToF1">
+                            <i class="fas fa-upload mr-2"></i>
+                            Upload New Material
+                        </button>
+                    </div>
+                </div>
+
+                <!-- F2: Heart Translator -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 card-hover cursor-pointer">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 bg-green-100 rounded-lg">
+                                <i class="fas fa-heart text-green-600 text-2xl"></i>
+                            </div>
+                            <span class="text-sm text-gray-500">#F2</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">마음의 통역사</h3>
+                        <p class="text-gray-600 mb-4">AI companion for emotional support with real-time sentiment analysis and cultural context understanding.</p>
+                        
+                        <div class="space-y-3 mb-6">
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-600">Mood today</span>
+                                <span class="flex items-center">
+                                    <span class="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
+                                    <span class="font-medium text-gray-900">Positive</span>
+                                </span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-600">Chat sessions</span>
+                                <span class="font-medium text-gray-900" data-bind="f2.chatSessions">8 today</span>
+                            </div>
+                        </div>
+
+                        <button class="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-green-700 transition-colors" data-event="click:navigateToF2">
+                            <i class="fas fa-comments mr-2"></i>
+                            Start Conversation
+                        </button>
+                    </div>
+                </div>
+
+                <!-- F3: Professor Communication Helper -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 card-hover cursor-pointer">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="p-3 bg-orange-100 rounded-lg">
+                                <i class="fas fa-user-tie text-orange-600 text-2xl"></i>
+                            </div>
+                            <span class="text-sm text-gray-500">#F3</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">교수 소통 헬퍼</h3>
+                        <p class="text-gray-600 mb-4">Generate culturally appropriate emails, questions, and presentation scripts for academic communication.</p>
+                        
+                        <div class="space-y-3 mb-6">
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-600">Templates used</span>
+                                <span class="font-medium text-gray-900" data-bind="f3.templatesUsed">4 this week</span>
+                            </div>
+                            <div class="flex items-center justify-between text-sm">
+                                <span class="text-gray-600">Success rate</span>
+                                <span class="font-medium text-gray-900">92%</span>
+                            </div>
+                        </div>
+
+                        <button class="w-full bg-orange-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-orange-700 transition-colors" data-event="click:navigateToF3">
+                            <i class="fas fa-edit mr-2"></i>
+                            Create Template
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Recent Activity -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                    <div class="p-6 border-b border-gray-200">
+                        <h3 class="text-lg font-bold text-gray-900">Recent Activity</h3>
+                    </div>
+                    <div class="p-6">
+                        <!-- @MAP: activities.map(activity => ( -->
+                        <div class="space-y-4">
+                            <div class="flex items-start space-x-3" data-mock="true">
+                                <div class="p-2 bg-blue-100 rounded-lg">
+                                    <i class="fas fa-file-alt text-blue-600"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900">Uploaded "Database Systems Lecture 5"</p>
+                                    <p class="text-xs text-gray-500">2 hours ago</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start space-x-3" data-mock="true">
+                                <div class="p-2 bg-green-100 rounded-lg">
+                                    <i class="fas fa-heart text-green-600"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900">Completed emotional check-in</p>
+                                    <p class="text-xs text-gray-500">5 hours ago</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start space-x-3" data-mock="true">
+                                <div class="p-2 bg-orange-100 rounded-lg">
+                                    <i class="fas fa-envelope text-orange-600"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900">Generated email template for Prof. Kim</p>
+                                    <p class="text-xs text-gray-500">1 day ago</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start space-x-3" data-mock="true">
+                                <div class="p-2 bg-purple-100 rounded-lg">
+                                    <i class="fas fa-chart-line text-purple-600"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900">Weekly progress report generated</p>
+                                    <p class="text-xs text-gray-500">2 days ago</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- @END_MAP )) -->
+                        
+                        <button class="w-full mt-4 text-center text-sm text-cnu-blue hover:text-blue-700 font-medium" data-event="click:viewAllActivity">
+                            View all activity
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Learning Progress -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+                    <div class="p-6 border-b border-gray-200">
+                        <h3 class="text-lg font-bold text-gray-900">Learning Progress</h3>
+                    </div>
+                    <div class="p-6">
+                        <div class="space-y-6">
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-sm font-medium text-gray-700">Overall Progress</span>
+                                    <span class="text-sm font-bold text-gray-900">78%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-cnu-blue h-2 rounded-full" style="width: 78%"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-sm font-medium text-gray-700">Emotional Well-being</span>
+                                    <span class="text-sm font-bold text-gray-900">85%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" style="width: 85%"></div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="flex justify-between items-center mb-2">
+                                    <span class="text-sm font-medium text-gray-700">Communication Skills</span>
+                                    <span class="text-sm font-bold text-gray-900">72%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-orange-500 h-2 rounded-full" style="width: 72%"></div>
+                                </div>
+                            </div>
+
+                            <div class="pt-4 border-t border-gray-200">
+                                <h4 class="text-sm font-medium text-gray-700 mb-3">Achievements</h4>
+                                <div class="grid grid-cols-3 gap-3">
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                                            <i class="fas fa-trophy text-yellow-600 text-lg"></i>
+                                        </div>
+                                        <span class="text-xs text-gray-600">First Upload</span>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                                            <i class="fas fa-star text-blue-600 text-lg"></i>
+                                        </div>
+                                        <span class="text-xs text-gray-600">Quiz Master</span>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                                            <i class="fas fa-heart text-green-600 text-lg"></i>
+                                        </div>
+                                        <span class="text-xs text-gray-600">Mindful Student</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CNU Integration Notice -->
+            <div class="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
+                <div class="flex items-start space-x-3">
+                    <div class="p-2 bg-blue-100 rounded-lg">
+                        <i class="fas fa-university text-blue-600"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-blue-900 mb-2">Connected to CNU Services</h4>
+                        <p class="text-blue-800 mb-3">UniBuddy integrates with International Affairs Office, Student Counseling Center, and Academic Support services to provide comprehensive assistance.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                <i class="fas fa-check-circle mr-1"></i>
+                                TOPIK Center
+                            </span>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                <i class="fas fa-check-circle mr-1"></i>
+                                Student Counseling
+                            </span>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                <i class="fas fa-check-circle mr-1"></i>
+                                LMS Integration
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- @END_COMPONENT: DashboardContent -->
+    </div>
+    <!-- @END_COMPONENT: MainContent -->
+
+    <!-- @COMPONENT: JavaScriptInteractions -->
+    <script>
+        (function() {
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const sidebar = document.getElementById('sidebar');
+            const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+
+            function toggleMobileMenu() {
+                sidebar.classList.toggle('sidebar-hidden');
+                mobileMenuOverlay.classList.toggle('hidden');
+            }
+
+            function closeMobileMenu() {
+                sidebar.classList.add('sidebar-hidden');
+                mobileMenuOverlay.classList.add('hidden');
+            }
+
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+            }
+
+            if (mobileMenuOverlay) {
+                mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+            }
+
+            // Close mobile menu on window resize to desktop
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 768) {
+                    closeMobileMenu();
+                }
+            });
+
+            // TODO: Implement navigation to feature modules
+            // TODO: Implement real-time data fetching for stats
+            // TODO: Implement user profile management
+            // TODO: Implement notification system
+            // TODO: Implement language switching functionality
+            // TODO: Connect to backend APIs for dashboard data
+            // TODO: Implement progress tracking and analytics
+
+            // Placeholder for feature navigation
+            document.querySelectorAll('[data-event^="click:navigateTo"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const feature = this.getAttribute('data-event').split(':')[1];
+                    console.log(`Navigate to ${feature}`);
+                    // TODO: Implement actual navigation logic
+                });
+            });
+        })();
+    </script>
+    <!-- @END_COMPONENT: JavaScriptInteractions -->
+</body>
+</html>

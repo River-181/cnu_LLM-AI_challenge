@@ -1,0 +1,542 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniBuddy - CNU International Student AI Support</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cnu-blue': '#1565C0',
+                        'cnu-light-blue': '#42A5F5',
+                        'supportive-teal': '#00897B',
+                        'supportive-orange': '#FF8F00',
+                        'warm-gray': '#F5F5F5',
+                        'text-primary': '#333333',
+                        'text-secondary': '#666666'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="font-inter bg-warm-gray min-h-screen">
+    <!-- @COMPONENT: OnboardingFlow [handles initial setup and language selection] -->
+    <div id="onboarding-flow" class="min-h-screen">
+        <!-- @COMPONENT: WelcomeScreen [initial landing with CNU branding] -->
+        <div id="welcome-screen" class="min-h-screen bg-gradient-to-br from-cnu-blue to-cnu-light-blue flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-12 max-w-2xl w-full text-center">
+                <!-- CNU Logo and Branding -->
+                <div class="mb-8">
+                    <!-- CNU university logo placeholder -->
+                    <div class="w-24 h-24 bg-cnu-blue rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="fas fa-graduation-cap text-white text-3xl"></i>
+                    </div>
+                    <h1 class="text-3xl md:text-4xl font-bold text-text-primary mb-4">
+                        Welcome to <span class="text-cnu-blue">UniBuddy</span>
+                    </h1>
+                    <p class="text-lg text-text-secondary mb-2">Chungnam National University</p>
+                    <p class="text-text-secondary leading-relaxed">
+                        Your AI companion for academic success, emotional support, and cultural adaptation. 
+                        We're here to help you thrive during your studies at CNU.
+                    </p>
+                </div>
+                
+                <!-- Key Features Preview -->
+                <div class="grid md:grid-cols-3 gap-4 mb-8">
+                    <div class="p-4 bg-warm-gray rounded-xl">
+                        <i class="fas fa-brain text-cnu-blue text-xl mb-2"></i>
+                        <p class="text-sm font-medium">AI Lecture Helper</p>
+                    </div>
+                    <div class="p-4 bg-warm-gray rounded-xl">
+                        <i class="fas fa-heart text-supportive-teal text-xl mb-2"></i>
+                        <p class="text-sm font-medium">Emotional Support</p>
+                    </div>
+                    <div class="p-4 bg-warm-gray rounded-xl">
+                        <i class="fas fa-comments text-supportive-orange text-xl mb-2"></i>
+                        <p class="text-sm font-medium">Communication Help</p>
+                    </div>
+                </div>
+                
+                <button 
+                    onclick="showLanguageSelection()" 
+                    class="bg-cnu-blue hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-xl transition duration-300 w-full md:w-auto"
+                    data-event="click:showLanguageSelection"
+                >
+                    Get Started
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- @COMPONENT: LanguageSelectionScreen [comprehensive language selection with flags] -->
+        <div id="language-selection" class="min-h-screen bg-white p-4 hidden">
+            <div class="max-w-4xl mx-auto py-8">
+                <!-- Progress Indicator -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-center mb-4">
+                        <div class="w-8 h-8 bg-cnu-blue rounded-full flex items-center justify-center text-white text-sm font-semibold">1</div>
+                        <div class="w-16 h-1 bg-cnu-blue mx-2"></div>
+                        <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-gray-600 text-sm font-semibold">2</div>
+                    </div>
+                    <p class="text-center text-text-secondary">Language Selection</p>
+                </div>
+
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-text-primary mb-4">Choose Your Language</h2>
+                    <p class="text-text-secondary">Select your preferred language for the best UniBuddy experience</p>
+                </div>
+
+                <!-- Language Grid -->
+                <!-- @MAP: languages.map(language => ( -->
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-8">
+                    <!-- Language Option Cards -->
+                    <div class="language-option p-4 border-2 border-gray-200 rounded-xl hover:border-cnu-blue hover:shadow-md transition duration-300 cursor-pointer" data-language="en">
+                        <div class="text-center">
+                            <span class="text-3xl mb-2 block">🇺🇸</span>
+                            <span class="font-medium text-text-primary">English</span>
+                        </div>
+                    </div>
+                    
+                    <div class="language-option p-4 border-2 border-gray-200 rounded-xl hover:border-cnu-blue hover:shadow-md transition duration-300 cursor-pointer" data-language="ko">
+                        <div class="text-center">
+                            <span class="text-3xl mb-2 block">🇰🇷</span>
+                            <span class="font-medium text-text-primary">한국어</span>
+                        </div>
+                    </div>
+                    
+                    <div class="language-option p-4 border-2 border-gray-200 rounded-xl hover:border-cnu-blue hover:shadow-md transition duration-300 cursor-pointer" data-language="zh">
+                        <div class="text-center">
+                            <span class="text-3xl mb-2 block">🇨🇳</span>
+                            <span class="font-medium text-text-primary">中文</span>
+                        </div>
+                    </div>
+                    
+                    <div class="language-option p-4 border-2 border-gray-200 rounded-xl hover:border-cnu-blue hover:shadow-md transition duration-300 cursor-pointer" data-language="ja">
+                        <div class="text-center">
+                            <span class="text-3xl mb-2 block">🇯🇵</span>
+                            <span class="font-medium text-text-primary">日本語</span>
+                        </div>
+                    </div>
+                    
+                    <div class="language-option p-4 border-2 border-gray-200 rounded-xl hover:border-cnu-blue hover:shadow-md transition duration-300 cursor-pointer" data-language="vi">
+                        <div class="text-center">
+                            <span class="text-3xl mb-2 block">🇻🇳</span>
+                            <span class="font-medium text-text-primary">Tiếng Việt</span>
+                        </div>
+                    </div>
+                    
+                    <div class="language-option p-4 border-2 border-gray-200 rounded-xl hover:border-cnu-blue hover:shadow-md transition duration-300 cursor-pointer" data-language="th">
+                        <div class="text-center">
+                            <span class="text-3xl mb-2 block">🇹🇭</span>
+                            <span class="font-medium text-text-primary">ไทย</span>
+                        </div>
+                    </div>
+                    
+                    <div class="language-option p-4 border-2 border-gray-200 rounded-xl hover:border-cnu-blue hover:shadow-md transition duration-300 cursor-pointer" data-language="id">
+                        <div class="text-center">
+                            <span class="text-3xl mb-2 block">🇮🇩</span>
+                            <span class="font-medium text-text-primary">Indonesia</span>
+                        </div>
+                    </div>
+                    
+                    <div class="language-option p-4 border-2 border-gray-200 rounded-xl hover:border-cnu-blue hover:shadow-md transition duration-300 cursor-pointer" data-language="es">
+                        <div class="text-center">
+                            <span class="text-3xl mb-2 block">🇪🇸</span>
+                            <span class="font-medium text-text-primary">Español</span>
+                        </div>
+                    </div>
+                    
+                    <div class="language-option p-4 border-2 border-gray-200 rounded-xl hover:border-cnu-blue hover:shadow-md transition duration-300 cursor-pointer" data-language="fr">
+                        <div class="text-center">
+                            <span class="text-3xl mb-2 block">🇫🇷</span>
+                            <span class="font-medium text-text-primary">Français</span>
+                        </div>
+                    </div>
+                    
+                    <div class="language-option p-4 border-2 border-gray-200 rounded-xl hover:border-cnu-blue hover:shadow-md transition duration-300 cursor-pointer" data-language="de">
+                        <div class="text-center">
+                            <span class="text-3xl mb-2 block">🇩🇪</span>
+                            <span class="font-medium text-text-primary">Deutsch</span>
+                        </div>
+                    </div>
+                    
+                    <div class="language-option p-4 border-2 border-gray-200 rounded-xl hover:border-cnu-blue hover:shadow-md transition duration-300 cursor-pointer" data-language="ru">
+                        <div class="text-center">
+                            <span class="text-3xl mb-2 block">🇷🇺</span>
+                            <span class="font-medium text-text-primary">Русский</span>
+                        </div>
+                    </div>
+                    
+                    <div class="language-option p-4 border-2 border-gray-200 rounded-xl hover:border-cnu-blue hover:shadow-md transition duration-300 cursor-pointer" data-language="ar">
+                        <div class="text-center">
+                            <span class="text-3xl mb-2 block">🇸🇦</span>
+                            <span class="font-medium text-text-primary">العربية</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_MAP )) -->
+
+                <div class="text-center">
+                    <button 
+                        onclick="showNameInput()" 
+                        class="bg-cnu-blue hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-xl transition duration-300"
+                        data-event="click:showNameInput"
+                    >
+                        Continue
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- @COMPONENT: NameInputScreen [personalized setup] -->
+        <div id="name-input" class="min-h-screen bg-white p-4 hidden">
+            <div class="max-w-2xl mx-auto py-16">
+                <!-- Progress Indicator -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-center mb-4">
+                        <div class="w-8 h-8 bg-cnu-blue rounded-full flex items-center justify-center text-white text-sm font-semibold">✓</div>
+                        <div class="w-16 h-1 bg-cnu-blue mx-2"></div>
+                        <div class="w-8 h-8 bg-cnu-blue rounded-full flex items-center justify-center text-white text-sm font-semibold">2</div>
+                    </div>
+                    <p class="text-center text-text-secondary">Personal Information</p>
+                </div>
+
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-text-primary mb-4">What should we call you?</h2>
+                    <p class="text-text-secondary">Let's personalize your UniBuddy experience</p>
+                </div>
+
+                <form class="space-y-6">
+                    <div>
+                        <label for="user-name" class="block text-sm font-medium text-text-primary mb-2">Your Name</label>
+                        <input 
+                            type="text" 
+                            id="user-name" 
+                            data-bind="user.name"
+                            placeholder="Enter your preferred name"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cnu-blue focus:border-transparent transition duration-300"
+                        >
+                    </div>
+                    
+                    <div>
+                        <label for="student-id" class="block text-sm font-medium text-text-primary mb-2">Student ID (Optional)</label>
+                        <input 
+                            type="text" 
+                            id="student-id" 
+                            data-bind="user.studentId"
+                            placeholder="Your CNU student ID"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cnu-blue focus:border-transparent transition duration-300"
+                        >
+                    </div>
+
+                    <div class="pt-4">
+                        <button 
+                            type="button"
+                            onclick="showMainDashboard()" 
+                            class="w-full bg-cnu-blue hover:bg-blue-700 text-white font-semibold py-4 rounded-xl transition duration-300"
+                            data-event="click:showMainDashboard"
+                            data-implementation="Should store user preferences and redirect to main app"
+                        >
+                            Start Using UniBuddy
+                            <i class="fas fa-rocket ml-2"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: OnboardingFlow -->
+
+    <!-- @COMPONENT: MainDashboard [primary application interface] -->
+    <div id="main-dashboard" class="min-h-screen bg-white hidden">
+        <!-- @COMPONENT: Header [navigation and user info] -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center">
+                        <div class="w-8 h-8 bg-cnu-blue rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-graduation-cap text-white text-sm"></i>
+                        </div>
+                        <h1 class="text-xl font-bold text-cnu-blue">UniBuddy</h1>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <select class="border border-gray-300 rounded-lg px-3 py-1 text-sm">
+                            <option>🇺🇸 English</option>
+                            <option>🇰🇷 한국어</option>
+                            <option>🇨🇳 中文</option>
+                        </select>
+                        
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-gray-600 text-sm"></i>
+                            </div>
+                            <span class="text-sm font-medium text-text-primary" data-bind="user.name">Student</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- @END_COMPONENT: Header -->
+
+        <!-- @COMPONENT: WelcomeSection [personalized greeting] -->
+        <section class="bg-gradient-to-r from-cnu-blue to-cnu-light-blue text-white py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold mb-4">Welcome back, <span data-bind="user.name">Student</span>! 👋</h2>
+                    <p class="text-xl opacity-90">How can UniBuddy help you today?</p>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: WelcomeSection -->
+
+        <!-- @COMPONENT: MainFeatures [core functionality cards] -->
+        <section class="py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid md:grid-cols-3 gap-8">
+                    
+                    <!-- F1: AI Lecture Reformatter -->
+                    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition duration-300 cursor-pointer" 
+                         onclick="openFeature('lecture-reformatter')"
+                         data-event="click:openLectureReformatter">
+                        <div class="text-center mb-6">
+                            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-brain text-cnu-blue text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-text-primary mb-2">AI Lecture Reformatter</h3>
+                            <p class="text-text-secondary text-sm">Transform lectures into personalized study materials</p>
+                        </div>
+                        
+                        <div class="space-y-3 mb-6">
+                            <div class="flex items-center text-sm text-text-secondary">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                PPT & Audio Upload
+                            </div>
+                            <div class="flex items-center text-sm text-text-secondary">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                AI Summarization
+                            </div>
+                            <div class="flex items-center text-sm text-text-secondary">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                Auto Quiz Generation
+                            </div>
+                            <div class="flex items-center text-sm text-text-secondary">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                Multilingual Support
+                            </div>
+                        </div>
+                        
+                        <button class="w-full bg-cnu-blue hover:bg-blue-700 text-white font-semibold py-3 rounded-xl transition duration-300">
+                            Start Reformatting
+                        </button>
+                    </div>
+
+                    <!-- F2: Emotional Translator -->
+                    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition duration-300 cursor-pointer"
+                         onclick="openFeature('emotional-translator')"
+                         data-event="click:openEmotionalTranslator">
+                        <div class="text-center mb-6">
+                            <div class="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-heart text-supportive-teal text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-text-primary mb-2">Emotional Translator</h3>
+                            <p class="text-text-secondary text-sm">Get emotional support and cultural guidance</p>
+                        </div>
+                        
+                        <div class="space-y-3 mb-6">
+                            <div class="flex items-center text-sm text-text-secondary">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                Emotion Analysis
+                            </div>
+                            <div class="flex items-center text-sm text-text-secondary">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                Cultural Context
+                            </div>
+                            <div class="flex items-center text-sm text-text-secondary">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                Empathetic Responses
+                            </div>
+                            <div class="flex items-center text-sm text-text-secondary">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                Resource Recommendations
+                            </div>
+                        </div>
+                        
+                        <button class="w-full bg-supportive-teal hover:bg-teal-700 text-white font-semibold py-3 rounded-xl transition duration-300">
+                            Start Chat
+                        </button>
+                    </div>
+
+                    <!-- F3: Communication Helper -->
+                    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition duration-300 cursor-pointer"
+                         onclick="openFeature('communication-helper')"
+                         data-event="click:openCommunicationHelper">
+                        <div class="text-center mb-6">
+                            <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-comments text-supportive-orange text-2xl"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-text-primary mb-2">Communication Helper</h3>
+                            <p class="text-text-secondary text-sm">Perfect your academic communication in Korean</p>
+                        </div>
+                        
+                        <div class="space-y-3 mb-6">
+                            <div class="flex items-center text-sm text-text-secondary">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                Email Templates
+                            </div>
+                            <div class="flex items-center text-sm text-text-secondary">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                Tone Adjustment
+                            </div>
+                            <div class="flex items-center text-sm text-text-secondary">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                Cultural Adaptation
+                            </div>
+                            <div class="flex items-center text-sm text-text-secondary">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                Presentation Scripts
+                            </div>
+                        </div>
+                        
+                        <button class="w-full bg-supportive-orange hover:bg-orange-600 text-white font-semibold py-3 rounded-xl transition duration-300">
+                            Get Help Writing
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: MainFeatures -->
+
+        <!-- @COMPONENT: QuickActions [additional resources] -->
+        <section class="bg-warm-gray py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h3 class="text-2xl font-bold text-text-primary text-center mb-8">Quick Actions</h3>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white rounded-xl p-6 text-center hover:shadow-md transition duration-300">
+                        <i class="fas fa-calendar-alt text-cnu-blue text-2xl mb-3"></i>
+                        <h4 class="font-semibold text-text-primary mb-2">Schedule</h4>
+                        <p class="text-sm text-text-secondary">View your class schedule</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl p-6 text-center hover:shadow-md transition duration-300">
+                        <i class="fas fa-users text-supportive-teal text-2xl mb-3"></i>
+                        <h4 class="font-semibold text-text-primary mb-2">Community</h4>
+                        <p class="text-sm text-text-secondary">Connect with other students</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl p-6 text-center hover:shadow-md transition duration-300">
+                        <i class="fas fa-phone text-supportive-orange text-2xl mb-3"></i>
+                        <h4 class="font-semibold text-text-primary mb-2">Counseling</h4>
+                        <p class="text-sm text-text-secondary">Book a counseling session</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-xl p-6 text-center hover:shadow-md transition duration-300">
+                        <i class="fas fa-info-circle text-purple-500 text-2xl mb-3"></i>
+                        <h4 class="font-semibold text-text-primary mb-2">Campus Info</h4>
+                        <p class="text-sm text-text-secondary">University resources</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: QuickActions -->
+
+        <!-- @COMPONENT: SupportSection [emergency and contact info] -->
+        <section class="bg-red-50 border-l-4 border-red-400 py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-triangle text-red-400 text-xl"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-red-800">Need Immediate Help?</h3>
+                        <div class="mt-2 text-sm text-red-700">
+                            <p>If you're experiencing a mental health emergency, please contact:</p>
+                            <div class="mt-2 space-y-1">
+                                <p><strong>CNU Student Counseling Center:</strong> +82-42-821-5454</p>
+                                <p><strong>24/7 Crisis Hotline:</strong> 1588-9191</p>
+                                <p><strong>International Affairs Office:</strong> +82-42-821-5497</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: SupportSection -->
+    </div>
+    <!-- @END_COMPONENT: MainDashboard -->
+
+    <script>
+        (function() {
+            // TODO: Implement proper state management and API integration
+            
+            let selectedLanguage = 'en';
+            let userName = '';
+            
+            window.showLanguageSelection = function() {
+                document.getElementById('welcome-screen').classList.add('hidden');
+                document.getElementById('language-selection').classList.remove('hidden');
+            };
+            
+            window.showNameInput = function() {
+                document.getElementById('language-selection').classList.add('hidden');
+                document.getElementById('name-input').classList.remove('hidden');
+            };
+            
+            window.showMainDashboard = function() {
+                // TODO: Validate user input and store preferences
+                const nameInput = document.getElementById('user-name').value;
+                if (nameInput.trim()) {
+                    userName = nameInput.trim();
+                    // Update name displays
+                    document.querySelectorAll('[data-bind="user.name"]').forEach(el => {
+                        el.textContent = userName;
+                    });
+                }
+                
+                document.getElementById('onboarding-flow').classList.add('hidden');
+                document.getElementById('main-dashboard').classList.remove('hidden');
+            };
+            
+            window.openFeature = function(featureName) {
+                // TODO: Implement navigation to specific feature modules
+                console.log('Opening feature:', featureName);
+            };
+            
+            // Language selection handling
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.language-option')) {
+                    const languageCard = e.target.closest('.language-option');
+                    selectedLanguage = languageCard.dataset.language;
+                    
+                    // Remove previous selection
+                    document.querySelectorAll('.language-option').forEach(card => {
+                        card.classList.remove('border-cnu-blue', 'bg-blue-50');
+                        card.classList.add('border-gray-200');
+                    });
+                    
+                    // Highlight selected language
+                    languageCard.classList.add('border-cnu-blue', 'bg-blue-50');
+                    languageCard.classList.remove('border-gray-200');
+                }
+            });
+            
+            // Accessibility: keyboard navigation for language selection
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && e.target.closest('.language-option')) {
+                    e.target.closest('.language-option').click();
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

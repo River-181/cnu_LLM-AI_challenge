@@ -1,0 +1,465 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniBuddy - AI Companion for International Students</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'noto': ['Noto Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#1976D2',
+                        'primary-dark': '#1565C0',
+                        secondary: '#FF6B6B',
+                        'secondary-dark': '#FF5252',
+                        success: '#4CAF50',
+                        warning: '#FF9800',
+                        'bg-soft': '#FAFAFA',
+                        'text-primary': '#212121',
+                        'text-secondary': '#757575',
+                    },
+                    boxShadow: {
+                        'material': '0 2px 4px rgba(0,0,0,0.1), 0 8px 16px rgba(0,0,0,0.1)',
+                        'material-lg': '0 4px 8px rgba(0,0,0,0.12), 0 12px 24px rgba(0,0,0,0.15)',
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+<body class="font-noto bg-bg-soft text-text-primary">
+    <!-- @COMPONENT: AppHeader [navigation, language switcher, user profile] -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-graduation-cap text-primary text-2xl mr-3"></i>
+                        <span class="text-xl font-bold text-primary">UniBuddy</span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <!-- Language Switcher -->
+                    <div class="relative">
+                        <button class="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors">
+                            <i class="fas fa-globe text-text-secondary"></i>
+                            <span class="text-sm font-medium">EN</span>
+                            <i class="fas fa-chevron-down text-xs text-text-secondary"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Notifications -->
+                    <button class="relative p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-bell text-text-secondary"></i>
+                        <span class="absolute -top-1 -right-1 bg-secondary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                    </button>
+                    
+                    <!-- User Profile -->
+                    <div class="flex items-center space-x-3">
+                        <!-- A profile photo of a smiling international student -->
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=150&h=150" alt="User profile" class="h-8 w-8 rounded-full">
+                        <span class="hidden sm:block text-sm font-medium" data-bind="user.name">Alex Chen</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- @END_COMPONENT: AppHeader -->
+
+    <!-- @COMPONENT: MainContent [dashboard layout with feature cards] -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Welcome Section -->
+        <!-- @COMPONENT: WelcomeSection [personalized greeting, emotion check-in] -->
+        <section class="mb-8">
+            <div class="bg-gradient-to-r from-primary to-primary-dark rounded-2xl p-6 text-white shadow-material-lg">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                    <div class="mb-4 md:mb-0">
+                        <h1 class="text-2xl md:text-3xl font-bold mb-2" data-bind="greeting">Good morning, Alex! 👋</h1>
+                        <p class="text-blue-100 text-lg">How are you feeling today? Let's make your learning journey easier.</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <!-- Quick Emotion Check-in -->
+                        <div class="bg-white bg-opacity-20 rounded-xl p-4 text-center">
+                            <div class="text-sm text-blue-100 mb-2">Today's Mood</div>
+                            <div class="flex space-x-2 justify-center">
+                                <button class="w-8 h-8 rounded-full bg-success text-white text-lg hover:scale-110 transition-transform">😊</button>
+                                <button class="w-8 h-8 rounded-full bg-white bg-opacity-30 text-lg hover:scale-110 transition-transform">😐</button>
+                                <button class="w-8 h-8 rounded-full bg-white bg-opacity-30 text-lg hover:scale-110 transition-transform">😔</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: WelcomeSection -->
+
+        <!-- Quick Stats -->
+        <!-- @COMPONENT: StatsOverview [learning progress, emotional wellness metrics] -->
+        <section class="mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-white rounded-xl p-6 shadow-material">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-text-secondary text-sm font-medium">Study Sessions</p>
+                            <p class="text-2xl font-bold text-text-primary">12</p>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-book text-primary text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-material">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-text-secondary text-sm font-medium">Wellness Score</p>
+                            <p class="text-2xl font-bold text-success">8.2/10</p>
+                        </div>
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-heart text-success text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-material">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-text-secondary text-sm font-medium">Messages Sent</p>
+                            <p class="text-2xl font-bold text-text-primary">28</p>
+                        </div>
+                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-comments text-warning text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-material">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-text-secondary text-sm font-medium">Course Progress</p>
+                            <p class="text-2xl font-bold text-text-primary">76%</p>
+                        </div>
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-chart-line text-purple-600 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- @END_COMPONENT: StatsOverview -->
+
+        <!-- Main Features -->
+        <section class="mb-8">
+            <h2 class="text-2xl font-bold text-text-primary mb-6">Your AI Learning Companions</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- @COMPONENT: LectureReformatterCard [F1 feature showcase] -->
+                <div class="bg-white rounded-2xl p-6 shadow-material hover:shadow-material-lg transition-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mr-4">
+                            <i class="fas fa-magic text-primary text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-text-primary">AI Lecture Reformatter</h3>
+                            <p class="text-text-secondary text-sm">Transform your lecture materials</p>
+                        </div>
+                    </div>
+                    
+                    <p class="text-text-secondary mb-6">Upload PPTs, notes, and recordings to get personalized summaries, terminology explanations, and auto-generated quizzes.</p>
+                    
+                    <!-- Upload Area -->
+                    <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center mb-4 hover:border-primary transition-colors cursor-pointer">
+                        <i class="fas fa-upload text-3xl text-gray-400 mb-2"></i>
+                        <p class="text-text-secondary">Drop your lecture files here</p>
+                        <p class="text-xs text-text-secondary mt-1">PPT, PDF, MP3, MP4 supported</p>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-success font-medium"><i class="fas fa-check-circle mr-1"></i> 3 files processed today</span>
+                        <button class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors font-medium">
+                            Upload New
+                        </button>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: LectureReformatterCard -->
+
+                <!-- @COMPONENT: EmotionalTranslatorCard [F2 feature showcase] -->
+                <div class="bg-white rounded-2xl p-6 shadow-material hover:shadow-material-lg transition-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center mr-4">
+                            <i class="fas fa-heart text-secondary text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-text-primary">Emotional Translator</h3>
+                            <p class="text-text-secondary text-sm">Your empathetic chat companion</p>
+                        </div>
+                    </div>
+                    
+                    <p class="text-text-secondary mb-6">Real-time emotion detection with cultural context understanding. Get support when you need it most.</p>
+                    
+                    <!-- Chat Preview -->
+                    <div class="bg-gray-50 rounded-xl p-4 mb-4 space-y-3">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white text-sm">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="bg-white rounded-lg p-3 shadow-sm flex-1">
+                                <p class="text-sm">I noticed you seem stressed about your presentation. Would you like to practice together?</p>
+                                <div class="flex items-center mt-2 space-x-2">
+                                    <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Stress: Moderate</span>
+                                    <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Context: Academic</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-secondary font-medium"><i class="fas fa-comments mr-1"></i> Always here to listen</span>
+                        <button class="bg-secondary text-white px-4 py-2 rounded-lg hover:bg-secondary-dark transition-colors font-medium">
+                            Start Chat
+                        </button>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: EmotionalTranslatorCard -->
+
+                <!-- @COMPONENT: CommunicationHelperCard [F3 feature showcase] -->
+                <div class="bg-white rounded-2xl p-6 shadow-material hover:shadow-material-lg transition-shadow">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mr-4">
+                            <i class="fas fa-language text-success text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-text-primary">Communication Helper</h3>
+                            <p class="text-text-secondary text-sm">Perfect your Korean communication</p>
+                        </div>
+                    </div>
+                    
+                    <p class="text-text-secondary mb-6">Generate polite emails, presentation scripts, and academic communications with cultural context awareness.</p>
+                    
+                    <!-- Template Options -->
+                    <div class="space-y-2 mb-4">
+                        <button class="w-full text-left p-3 border border-gray-200 rounded-lg hover:border-success hover:bg-green-50 transition-colors">
+                            <div class="flex items-center justify-between">
+                                <span class="font-medium">📧 Email to Professor</span>
+                                <i class="fas fa-chevron-right text-text-secondary"></i>
+                            </div>
+                        </button>
+                        <button class="w-full text-left p-3 border border-gray-200 rounded-lg hover:border-success hover:bg-green-50 transition-colors">
+                            <div class="flex items-center justify-between">
+                                <span class="font-medium">🎤 Presentation Script</span>
+                                <i class="fas fa-chevron-right text-text-secondary"></i>
+                            </div>
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-success font-medium"><i class="fas fa-check-double mr-1"></i> Tone checked</span>
+                        <button class="bg-success text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors font-medium">
+                            Create Template
+                        </button>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: CommunicationHelperCard -->
+            </div>
+        </section>
+
+        <!-- Recent Activity & Resources -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- @COMPONENT: RecentActivity [user activity timeline] -->
+            <section class="bg-white rounded-2xl p-6 shadow-material">
+                <h3 class="text-xl font-bold text-text-primary mb-6">Recent Activity</h3>
+                
+                <div class="space-y-4">
+                    <!-- @MAP: activities.map(activity => ( -->
+                    <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-xl">
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-file-alt text-primary"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-medium text-text-primary">Processed "Advanced Economics" lecture</p>
+                            <p class="text-text-secondary text-sm">Generated 15 study cards and 5 quiz questions</p>
+                            <p class="text-text-secondary text-xs mt-1">2 hours ago</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-xl">
+                        <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-heart text-secondary"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-medium text-text-primary">Emotional check-in completed</p>
+                            <p class="text-text-secondary text-sm">Recommended: Study break and meditation</p>
+                            <p class="text-text-secondary text-xs mt-1">5 hours ago</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-4 p-4 bg-gray-50 rounded-xl">
+                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-envelope text-success"></i>
+                        </div>
+                        <div class="flex-1">
+                            <p class="font-medium text-text-primary">Email template created</p>
+                            <p class="text-text-secondary text-sm">Professor meeting request - tone verified</p>
+                            <p class="text-text-secondary text-xs mt-1">1 day ago</p>
+                        </div>
+                    </div>
+                    <!-- @END_MAP )) -->
+                </div>
+            </section>
+            <!-- @END_COMPONENT: RecentActivity -->
+
+            <!-- @COMPONENT: CampusResources [university integration links] -->
+            <section class="bg-white rounded-2xl p-6 shadow-material">
+                <h3 class="text-xl font-bold text-text-primary mb-6">Campus Resources</h3>
+                
+                <div class="space-y-4">
+                    <a href="#" class="block p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition-colors">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-globe text-primary text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-text-primary">International Affairs Office</h4>
+                                <p class="text-text-secondary text-sm">Student support and services</p>
+                            </div>
+                            <i class="fas fa-external-link-alt text-text-secondary"></i>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="block p-4 border border-gray-200 rounded-xl hover:border-secondary hover:bg-red-50 transition-colors">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-user-friends text-secondary text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-text-primary">Student Counseling Center</h4>
+                                <p class="text-text-secondary text-sm">Mental health and wellness support</p>
+                            </div>
+                            <i class="fas fa-external-link-alt text-text-secondary"></i>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="block p-4 border border-gray-200 rounded-xl hover:border-success hover:bg-green-50 transition-colors">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-chalkboard-teacher text-success text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-text-primary">Learning Support Center</h4>
+                                <p class="text-text-secondary text-sm">Academic assistance and tutoring</p>
+                            </div>
+                            <i class="fas fa-external-link-alt text-text-secondary"></i>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="block p-4 border border-gray-200 rounded-xl hover:border-warning hover:bg-orange-50 transition-colors">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-language text-warning text-xl"></i>
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-medium text-text-primary">TOPIK Language Center</h4>
+                                <p class="text-text-secondary text-sm">Korean language proficiency support</p>
+                            </div>
+                            <i class="fas fa-external-link-alt text-text-secondary"></i>
+                        </div>
+                    </a>
+                </div>
+            </section>
+            <!-- @END_COMPONENT: CampusResources -->
+        </div>
+    </main>
+    <!-- @END_COMPONENT: MainContent -->
+
+    <!-- @COMPONENT: BottomNavigation [mobile navigation] -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 lg:hidden">
+        <div class="flex justify-around py-2">
+            <button class="flex flex-col items-center py-2 px-3 text-primary">
+                <i class="fas fa-home text-xl mb-1"></i>
+                <span class="text-xs font-medium">Home</span>
+            </button>
+            <button class="flex flex-col items-center py-2 px-3 text-text-secondary hover:text-primary transition-colors">
+                <i class="fas fa-magic text-xl mb-1"></i>
+                <span class="text-xs font-medium">Reformatter</span>
+            </button>
+            <button class="flex flex-col items-center py-2 px-3 text-text-secondary hover:text-primary transition-colors">
+                <i class="fas fa-comments text-xl mb-1"></i>
+                <span class="text-xs font-medium">Chat</span>
+            </button>
+            <button class="flex flex-col items-center py-2 px-3 text-text-secondary hover:text-primary transition-colors">
+                <i class="fas fa-language text-xl mb-1"></i>
+                <span class="text-xs font-medium">Helper</span>
+            </button>
+            <button class="flex flex-col items-center py-2 px-3 text-text-secondary hover:text-primary transition-colors">
+                <i class="fas fa-user text-xl mb-1"></i>
+                <span class="text-xs font-medium">Profile</span>
+            </button>
+        </div>
+    </nav>
+    <!-- @END_COMPONENT: BottomNavigation -->
+
+    <!-- Floating Action Button for Quick Access -->
+    <!-- @COMPONENT: QuickActionFAB [floating action button for emergency support] -->
+    <button class="fixed bottom-24 right-6 lg:bottom-6 w-14 h-14 bg-secondary hover:bg-secondary-dark text-white rounded-full shadow-material-lg flex items-center justify-center transition-all hover:scale-110">
+        <i class="fas fa-plus text-xl"></i>
+    </button>
+    <!-- @END_COMPONENT: QuickActionFAB -->
+
+    <script>
+        // TODO: Implement business logic, API calls, and state management
+        
+        (function() {
+            // Simple interaction handlers for demo purposes
+            
+            // Mood selection handler
+            const moodButtons = document.querySelectorAll('[class*="rounded-full"][class*="hover:scale-110"]');
+            moodButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // TODO: Send mood data to backend for emotion tracking
+                    moodButtons.forEach(btn => btn.classList.remove('bg-success'));
+                    this.classList.add('bg-success');
+                });
+            });
+            
+            // File upload simulation
+            const uploadArea = document.querySelector('[class*="border-dashed"]');
+            if (uploadArea) {
+                uploadArea.addEventListener('click', function() {
+                    // TODO: Implement file upload functionality
+                    alert('File upload functionality would be implemented here');
+                });
+            }
+            
+            // Navigation highlighting
+            const navButtons = document.querySelectorAll('nav button');
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // TODO: Implement proper routing
+                    navButtons.forEach(btn => {
+                        btn.classList.remove('text-primary');
+                        btn.classList.add('text-text-secondary');
+                    });
+                    this.classList.remove('text-text-secondary');
+                    this.classList.add('text-primary');
+                });
+            });
+            
+            // Floating Action Button
+            const fab = document.querySelector('.fixed.bottom-24, .fixed.bottom-6');
+            if (fab) {
+                fab.addEventListener('click', function() {
+                    // TODO: Implement quick action menu or emergency support
+                    alert('Quick action menu would open here');
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

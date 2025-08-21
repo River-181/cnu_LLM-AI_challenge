@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniBuddy - Your AI Study Companion</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/heroicons@2.0.18/outline/index.js"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    'inter': ['Inter', 'sans-serif'],
+                },
+                colors: {
+                    primary: '#4F46E5',
+                    secondary: '#10B981', 
+                    accent: '#F59E0B',
+                    muted: '#6B7280'
+                }
+            }
+        }
+    };
+    </script>
+</head>
+<body class="font-inter bg-gray-50">
+    <!-- @COMPONENT: OnboardingScreen [initial setup for name and language] -->
+    <div id="onboarding-screen" class="min-h-screen bg-gradient-to-br from-primary to-indigo-700 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
+            <!-- Chungnam National University logo placeholder -->
+            <div class="w-16 h-16 bg-primary rounded-full mx-auto mb-6 flex items-center justify-center">
+                <span class="text-white font-bold text-xl">CNU</span>
+            </div>
+            
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Welcome to UniBuddy</h1>
+            <p class="text-muted mb-8">Your AI companion for academic success and emotional support</p>
+            
+            <!-- @STATE: selectedLanguage:string = 'en' -->
+            <div class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2 text-left">Preferred Name</label>
+                    <input type="text" placeholder="What should we call you?" 
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                           data-bind="user.preferredName" data-mock="true">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-3 text-left">Language Preference</label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <button class="p-3 border-2 border-primary bg-primary text-white rounded-lg font-medium transition-all hover:bg-indigo-600" 
+                                data-event="click:selectLanguage" data-language="en">
+                            English
+                        </button>
+                        <button class="p-3 border-2 border-gray-300 text-gray-700 rounded-lg font-medium transition-all hover:border-primary hover:text-primary" 
+                                data-event="click:selectLanguage" data-language="ko">
+                            한국어
+                        </button>
+                        <button class="p-3 border-2 border-gray-300 text-gray-700 rounded-lg font-medium transition-all hover:border-primary hover:text-primary" 
+                                data-event="click:selectLanguage" data-language="zh">
+                            中文
+                        </button>
+                    </div>
+                </div>
+                
+                <button class="w-full bg-secondary text-white py-3 rounded-lg font-semibold hover:bg-emerald-600 transition-colors" 
+                        data-event="click:completeOnboarding">
+                    Get Started
+                </button>
+            </div>
+            
+            <p class="text-xs text-muted mt-6">By continuing, you agree to our privacy policy and data protection guidelines</p>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: OnboardingScreen -->
+
+    <!-- @COMPONENT: MainDashboard [primary interface after onboarding] -->
+    <div id="main-dashboard" class="hidden min-h-screen bg-gray-50">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-sm">UB</span>
+                        </div>
+                        <span class="text-xl font-bold text-gray-900">UniBuddy</span>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <!-- Language selector -->
+                        <select class="border border-gray-300 rounded-md px-3 py-1 text-sm focus:ring-2 focus:ring-primary focus:border-transparent" 
+                                data-bind="user.language" data-mock="true">
+                            <option value="en">EN</option>
+                            <option value="ko">한국어</option>
+                            <option value="zh">中文</option>
+                        </select>
+                        
+                        <!-- User menu -->
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
+                                <span class="text-white font-semibold text-sm" data-bind="user.initials" data-mock="true">JS</span>
+                            </div>
+                            <span class="text-gray-700 font-medium" data-bind="user.preferredName" data-mock="true">John</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Welcome Section -->
+            <div class="bg-gradient-to-r from-primary to-indigo-600 rounded-2xl p-8 text-white mb-8">
+                <h1 class="text-3xl font-bold mb-2">Good morning, <span data-bind="user.preferredName" data-mock="true">John</span>! 👋</h1>
+                <p class="text-indigo-100 text-lg">How can I help you with your studies today?</p>
+                
+                <!-- Quick stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                    <div class="bg-white/10 rounded-lg p-4">
+                        <div class="text-2xl font-bold" data-bind="stats.processedLectures" data-mock="true">12</div>
+                        <div class="text-indigo-100">Lectures Processed</div>
+                    </div>
+                    <div class="bg-white/10 rounded-lg p-4">
+                        <div class="text-2xl font-bold" data-bind="stats.emotionalCheckIns" data-mock="true">8</div>
+                        <div class="text-indigo-100">Emotional Check-ins</div>
+                    </div>
+                    <div class="bg-white/10 rounded-lg p-4">
+                        <div class="text-2xl font-bold" data-bind="stats.communicationHelps" data-mock="true">5</div>
+                        <div class="text-indigo-100">Communication Assists</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Core Features Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                <!-- @COMPONENT: LectureReformatterCard [F1 feature] -->
+                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer" 
+                     data-event="click:openLectureReformatter">
+                    <div class="p-6">
+                        <div class="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
+                            <i class="fas fa-chalkboard-teacher text-primary text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">AI Lecture Reformatter</h3>
+                        <p class="text-muted mb-4">Upload lectures for intelligent summaries, terminology explanations, and auto-generated quizzes</p>
+                        
+                        <div class="space-y-2">
+                            <div class="flex items-center text-sm text-gray-600">
+                                <i class="fas fa-file-upload w-4 mr-2"></i>
+                                PPT, Notes & Recordings
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <i class="fas fa-language w-4 mr-2"></i>
+                                Multilingual Support
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <i class="fas fa-brain w-4 mr-2"></i>
+                                AI-Powered Analysis
+                            </div>
+                        </div>
+                        
+                        <button class="w-full mt-4 bg-primary text-white py-2 rounded-lg font-medium hover:bg-indigo-600 transition-colors">
+                            Process Lecture
+                        </button>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: LectureReformatterCard -->
+
+                <!-- @COMPONENT: EmotionalTranslatorCard [F2 feature] -->
+                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer" 
+                     data-event="click:openEmotionalTranslator">
+                    <div class="p-6">
+                        <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-4">
+                            <i class="fas fa-heart text-secondary text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Emotional Translator</h3>
+                        <p class="text-muted mb-4">Real-time emotion detection with cultural context and empathetic support</p>
+                        
+                        <!-- Current mood indicator -->
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-green-700">Current Mood</span>
+                                <span class="text-green-600 font-semibold" data-bind="user.currentMood" data-mock="true">Calm</span>
+                            </div>
+                            <div class="w-full bg-green-200 rounded-full h-2 mt-2">
+                                <div class="bg-secondary h-2 rounded-full" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        
+                        <button class="w-full bg-secondary text-white py-2 rounded-lg font-medium hover:bg-emerald-600 transition-colors">
+                            Start Conversation
+                        </button>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: EmotionalTranslatorCard -->
+
+                <!-- @COMPONENT: CommunicationHelperCard [F3 feature] -->
+                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow cursor-pointer" 
+                     data-event="click:openCommunicationHelper">
+                    <div class="p-6">
+                        <div class="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center mb-4">
+                            <i class="fas fa-comments text-accent text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Communication Helper</h3>
+                        <p class="text-muted mb-4">Generate polite emails, presentations, and academic communications in Korean style</p>
+                        
+                        <div class="space-y-2">
+                            <div class="flex items-center text-sm text-gray-600">
+                                <i class="fas fa-envelope w-4 mr-2"></i>
+                                Email Templates
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <i class="fas fa-presentation w-4 mr-2"></i>
+                                Presentation Scripts
+                            </div>
+                            <div class="flex items-center text-sm text-gray-600">
+                                <i class="fas fa-check-circle w-4 mr-2"></i>
+                                Tone Verification
+                            </div>
+                        </div>
+                        
+                        <button class="w-full mt-4 bg-accent text-white py-2 rounded-lg font-medium hover:bg-amber-600 transition-colors">
+                            Create Message
+                        </button>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: CommunicationHelperCard -->
+            </div>
+
+            <!-- Recent Activity & Resources -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Recent Activity -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Recent Activity</h3>
+                    
+                    <!-- @MAP: recentActivities.map(activity => ( -->
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg" data-mock="true">
+                            <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-file-alt text-white text-sm"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-900">Processed "Advanced Algorithms" lecture</p>
+                                <p class="text-xs text-muted">2 hours ago</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg" data-mock="true">
+                            <div class="w-8 h-8 bg-secondary rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-heart text-white text-sm"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-900">Completed emotional check-in</p>
+                                <p class="text-xs text-muted">5 hours ago</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg" data-mock="true">
+                            <div class="w-8 h-8 bg-accent rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-envelope text-white text-sm"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-900">Generated email to Professor Kim</p>
+                                <p class="text-xs text-muted">Yesterday</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_MAP )) -->
+                </div>
+
+                <!-- Campus Resources -->
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Campus Resources</h3>
+                    
+                    <div class="space-y-3">
+                        <a href="#" class="block p-3 border border-gray-200 rounded-lg hover:border-primary hover:bg-primary/5 transition-all" 
+                           data-event="click:openResource" data-resource="counseling">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-medium text-gray-900">Student Counseling Center</h4>
+                                    <p class="text-sm text-muted">24/7 emotional support</p>
+                                </div>
+                                <i class="fas fa-chevron-right text-muted"></i>
+                            </div>
+                        </a>
+                        
+                        <a href="#" class="block p-3 border border-gray-200 rounded-lg hover:border-primary hover:bg-primary/5 transition-all" 
+                           data-event="click:openResource" data-resource="international">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-medium text-gray-900">International Affairs Office</h4>
+                                    <p class="text-sm text-muted">Visa & administrative support</p>
+                                </div>
+                                <i class="fas fa-chevron-right text-muted"></i>
+                            </div>
+                        </a>
+                        
+                        <a href="#" class="block p-3 border border-gray-200 rounded-lg hover:border-primary hover:bg-primary/5 transition-all" 
+                           data-event="click:openResource" data-resource="learning">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-medium text-gray-900">Teaching & Learning Center</h4>
+                                    <p class="text-sm text-muted">Academic skill development</p>
+                                </div>
+                                <i class="fas fa-chevron-right text-muted"></i>
+                            </div>
+                        </a>
+                        
+                        <a href="#" class="block p-3 border border-gray-200 rounded-lg hover:border-primary hover:bg-primary/5 transition-all" 
+                           data-event="click:openResource" data-resource="topik">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-medium text-gray-900">TOPIK Center</h4>
+                                    <p class="text-sm text-muted">Korean language proficiency</p>
+                                </div>
+                                <i class="fas fa-chevron-right text-muted"></i>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- @END_COMPONENT: MainDashboard -->
+
+    <!-- @COMPONENT: LectureReformatterModal [F1 detailed interface] -->
+    <div id="lecture-reformatter-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl max-w-4xl w-full max-h-screen overflow-y-auto">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-bold text-gray-900">AI Lecture Reformatter</h2>
+                    <button class="text-gray-400 hover:text-gray-600" data-event="click:closeLectureReformatter">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <!-- Upload Section -->
+                <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center mb-6 hover:border-primary transition-colors" 
+                     data-implementation="Should integrate with file upload API">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                        <i class="fas fa-cloud-upload-alt text-gray-400 text-2xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Upload Your Lecture Materials</h3>
+                    <p class="text-muted mb-4">Drag & drop or click to upload PPT, notes, recordings, or images</p>
+                    <button class="bg-primary text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-600 transition-colors">
+                        Choose Files
+                    </button>
+                    <p class="text-xs text-muted mt-2">Supports: .pptx, .pdf, .mp3, .mp4, .jpg, .png (Max 50MB)</p>
+                </div>
+
+                <!-- Processing Options -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div class="border border-gray-200 rounded-xl p-4">
+                        <h4 class="font-semibold text-gray-900 mb-3">Processing Options</h4>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary" checked data-mock="true">
+                                <span class="ml-2 text-sm text-gray-700">Generate summary</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary" checked data-mock="true">
+                                <span class="ml-2 text-sm text-gray-700">Create terminology cards</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary" checked data-mock="true">
+                                <span class="ml-2 text-sm text-gray-700">Auto-generate quiz</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary" data-mock="true">
+                                <span class="ml-2 text-sm text-gray-700">Background knowledge cards</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="border border-gray-200 rounded-xl p-4">
+                        <h4 class="font-semibold text-gray-900 mb-3">Output Language</h4>
+                        <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent" 
+                                data-bind="processing.outputLanguage" data-mock="true">
+                            <option value="en">English</option>
+                            <option value="ko">Korean (한국어)</option>
+                            <option value="zh">Chinese (中文)</option>
+                            <option value="bilingual">Bilingual (English + Korean)</option>
+                        </select>
+                        
+                        <div class="mt-3">
+                            <label class="block text-sm text-gray-700 mb-1">Difficulty Level</label>
+                            <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent" 
+                                    data-bind="processing.difficultyLevel" data-mock="true">
+                                <option value="beginner">Beginner</option>
+                                <option value="intermediate" selected>Intermediate</option>
+                                <option value="advanced">Advanced</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Process Button -->
+                <button class="w-full bg-primary text-white py-3 rounded-xl font-semibold text-lg hover:bg-indigo-600 transition-colors" 
+                        data-event="click:processLecture" data-implementation="Should validate files and start processing">
+                    Process Lecture Materials
+                </button>
+
+                <!-- @FUNCTIONALITY: This interface should integrate with GPT-based processing pipeline -->
+                <!-- Previous Results Preview (if any) -->
+                <div class="mt-8 border-t border-gray-200 pt-6" data-mock="true">
+                    <h4 class="font-semibold text-gray-900 mb-4">Previous Results</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="border border-gray-200 rounded-lg p-4 hover:border-primary hover:bg-primary/5 transition-all cursor-pointer">
+                            <div class="flex items-center justify-between mb-2">
+                                <h5 class="font-medium text-gray-900">Data Structures</h5>
+                                <span class="text-xs text-muted">2 days ago</span>
+                            </div>
+                            <p class="text-sm text-muted">Summary, 15 terms, 10 quiz questions</p>
+                        </div>
+                        <div class="border border-gray-200 rounded-lg p-4 hover:border-primary hover:bg-primary/5 transition-all cursor-pointer">
+                            <div class="flex items-center justify-between mb-2">
+                                <h5 class="font-medium text-gray-900">Korean History</h5>
+                                <span class="text-xs text-muted">1 week ago</span>
+                            </div>
+                            <p class="text-sm text-muted">Summary, 8 terms, 5 quiz questions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: LectureReformatterModal -->
+
+    <!-- @COMPONENT: EmotionalTranslatorModal [F2 detailed interface] -->
+    <div id="emotional-translator-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-screen overflow-y-auto">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-bold text-gray-900">Emotional Translator</h2>
+                    <button class="text-gray-400 hover:text-gray-600" data-event="click:closeEmotionalTranslator">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <!-- Emotional Status Dashboard -->
+                <div class="bg-gradient-to-r from-secondary to-emerald-600 rounded-xl p-6 text-white mb-6">
+                    <h3 class="text-lg font-semibold mb-4">Your Emotional Wellbeing</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <div class="text-2xl font-bold" data-bind="emotions.stressLevel" data-mock="true">Low</div>
+                            <div class="text-emerald-100 text-sm">Stress Level</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold" data-bind="emotions.moodScore" data-mock="true">8.2</div>
+                            <div class="text-emerald-100 text-sm">Mood Score (1-10)</div>
+                        </div>
+                    </div>
+                    
+                    <!-- @STATE: emotionalTrend:array = [] -->
+                    <div class="mt-4">
+                        <div class="text-sm text-emerald-100 mb-2">7-Day Trend</div>
+                        <div class="h-8 bg-white/20 rounded-lg flex items-end justify-between px-1">
+                            <!-- Mock trend bars -->
+                            <div class="w-1 bg-white/60 h-1/2 rounded-t" data-mock="true"></div>
+                            <div class="w-1 bg-white/60 h-3/4 rounded-t" data-mock="true"></div>
+                            <div class="w-1 bg-white/60 h-1/3 rounded-t" data-mock="true"></div>
+                            <div class="w-1 bg-white/60 h-2/3 rounded-t" data-mock="true"></div>
+                            <div class="w-1 bg-white/60 h-5/6 rounded-t" data-mock="true"></div>
+                            <div class="w-1 bg-white/60 h-4/5 rounded-t" data-mock="true"></div>
+                            <div class="w-1 bg-white h-full rounded-t" data-mock="true"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Interface -->
+                <div class="border border-gray-200 rounded-xl">
+                    <div class="bg-gray-50 px-4 py-3 border-b border-gray-200 rounded-t-xl">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-3 h-3 bg-secondary rounded-full"></div>
+                            <span class="text-sm font-medium text-gray-700">UniBuddy Assistant</span>
+                            <span class="text-xs text-muted">- Online</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 h-64 overflow-y-auto" data-implementation="Should implement real-time chat with emotion detection">
+                        <!-- @MAP: chatMessages.map(message => ( -->
+                        <div class="space-y-4" data-mock="true">
+                            <div class="flex items-start space-x-3">
+                                <div class="w-8 h-8 bg-secondary rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-robot text-white text-sm"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="bg-gray-100 rounded-lg px-4 py-2">
+                                        <p class="text-sm">Hello! I'm here to support you emotionally and culturally. How are you feeling today?</p>
+                                    </div>
+                                    <div class="text-xs text-muted mt-1">10:30 AM</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3 justify-end">
+                                <div class="flex-1 max-w-xs">
+                                    <div class="bg-primary text-white rounded-lg px-4 py-2">
+                                        <p class="text-sm">I'm feeling a bit overwhelmed with my Korean language assignment. I don't understand the cultural context.</p>
+                                    </div>
+                                    <div class="text-xs text-muted mt-1 text-right">10:32 AM</div>
+                                </div>
+                                <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center flex-shrink-0">
+                                    <span class="text-white text-sm font-semibold">J</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start space-x-3">
+                                <div class="w-8 h-8 bg-secondary rounded-full flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-robot text-white text-sm"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <div class="bg-gray-100 rounded-lg px-4 py-2">
+                                        <p class="text-sm">I understand that feeling overwhelmed with cultural context can be challenging. Let me help you break this down. What specific aspects of Korean culture in your assignment are confusing?</p>
+                                        <div class="mt-2 text-xs text-gray-500">
+                                            <span class="inline-block bg-red-100 text-red-800 px-2 py-1 rounded">Stress detected: Moderate</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-xs text-muted mt-1">10:35 AM</div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- @END_MAP )) -->
+                    </div>
+                    
+                    <div class="border-t border-gray-200 p-4">
+                        <div class="flex space-x-2">
+                            <input type="text" placeholder="Share your feelings or ask for help..." 
+                                   class="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-secondary focus:border-transparent"
+                                   data-bind="chat.currentMessage" data-mock="true">
+                            <button class="bg-secondary text-white px-4 py-2 rounded-lg hover:bg-emerald-600 transition-colors" 
+                                    data-event="click:sendMessage">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="mt-6">
+                    <h4 class="font-semibold text-gray-900 mb-3">Quick Emotional Support</h4>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button class="p-3 border border-gray-200 rounded-lg text-left hover:border-secondary hover:bg-secondary/5 transition-all" 
+                                data-event="click:quickAction" data-action="stress">
+                            <div class="text-sm font-medium text-gray-900">Feeling Stressed</div>
+                            <div class="text-xs text-muted">Get calming techniques</div>
+                        </button>
+                        <button class="p-3 border border-gray-200 rounded-lg text-left hover:border-secondary hover:bg-secondary/5 transition-all" 
+                                data-event="click:quickAction" data-action="cultural">
+                            <div class="text-sm font-medium text-gray-900">Cultural Confusion</div>
+                            <div class="text-xs text-muted">Understand Korean context</div>
+                        </button>
+                        <button class="p-3 border border-gray-200 rounded-lg text-left hover:border-secondary hover:bg-secondary/5 transition-all" 
+                                data-event="click:quickAction" data-action="homesick">
+                            <div class="text-sm font-medium text-gray-900">Feeling Homesick</div>
+                            <div class="text-xs text-muted">Connect with community</div>
+                        </button>
+                        <button class="p-3 border border-gray-200 rounded-lg text-left hover:border-secondary hover:bg-secondary/5 transition-all" 
+                                data-event="click:quickAction" data-action="academic">
+                            <div class="text-sm font-medium text-gray-900">Academic Pressure</div>
+                            <div class="text-xs text-muted">Study strategies & support</div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: EmotionalTranslatorModal -->
+
+    <!-- @COMPONENT: CommunicationHelperModal [F3 detailed interface] -->
+    <div id="communication-helper-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-2xl max-w-4xl w-full max-h-screen overflow-y-auto">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-bold text-gray-900">Communication Helper</h2>
+                    <button class="text-gray-400 hover:text-gray-600" data-event="click:closeCommunicationHelper">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <!-- Communication Type Selection -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">What would you like to create?</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <button class="p-4 border-2 border-primary bg-primary text-white rounded-xl text-left" 
+                                data-event="click:selectCommunicationType" data-type="email">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-envelope text-2xl"></i>
+                                <div>
+                                    <div class="font-semibold">Email</div>
+                                    <div class="text-sm opacity-90">To professors or staff</div>
+                                </div>
+                            </div>
+                        </button>
+                        
+                        <button class="p-4 border-2 border-gray-300 text-gray-700 rounded-xl text-left hover:border-primary hover:text-primary transition-all" 
+                                data-event="click:selectCommunicationType" data-type="presentation">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-presentation text-2xl"></i>
+                                <div>
+                                    <div class="font-semibold">Presentation</div>
+                                    <div class="text-sm opacity-90">Speech script</div>
+                                </div>
+                            </div>
+                        </button>
+                        
+                        <button class="p-4 border-2 border-gray-300 text-gray-700 rounded-xl text-left hover:border-primary hover:text-primary transition-all" 
+                                data-event="click:selectCommunicationType" data-type="question">
+                            <div class="flex items-center space-x-3">
+                                <i class="fas fa-question-circle text-2xl"></i>
+                                <div>
+                                    <div class="font-semibold">Question</div>
+                                    <div class="text-sm opacity-90">For class or office hours</div>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Email Creation Interface -->
+                <div id="email-creator" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Recipient</label>
+                            <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent" 
+                                    data-bind="email.recipient" data-mock="true">
+                                <option value="">Select recipient type</option>
+                                <option value="professor">Professor</option>
+                                <option value="ta">Teaching Assistant</option>
+                                <option value="admin">Administrative Staff</option>
+                                <option value="classmate">Classmate</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Purpose</label>
+                            <select class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent" 
+                                    data-bind="email.purpose" data-mock="true">
+                                <option value="">Select purpose</option>
+                                <option value="question">Ask a question</option>
+                                <option value="request">Make a request</option>
+                                <option value="apology">Apologize</option>
+                                <option value="meeting">Schedule meeting</option>
+                                <option value="absence">Report absence</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Your Message (in your natural style)</label>
+                        <textarea rows="4" 
+                                  placeholder="Write your message naturally. I'll help make it culturally appropriate for Korean academic settings..."
+                                  class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-primary focus:border-transparent"
+                                  data-bind="email.rawContent" data-mock="true"></textarea>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Formality Level</label>
+                            <select class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent" 
+                                    data-bind="email.formalityLevel" data-mock="true">
+                                <option value="very-formal">Very Formal (높임말)</option>
+                                <option value="formal" selected>Formal (존댓말)</option>
+                                <option value="polite">Polite (반말)</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Urgency</label>
+                            <select class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-transparent" 
+                                    data-bind="email.urgency" data-mock="true">
+                                <option value="low">Not urgent</option>
+                                <option value="medium" selected>Moderately urgent</option>
+                                <option value="high">Urgent</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="bg-accent text-white px-6 py-3 rounded-lg font-semibold hover:bg-amber-600 transition-colors" 
+                            data-event="click:generateCommunication" data-implementation="Should process text through cultural context AI">
+                        <i class="fas fa-magic mr-2"></i>
+                        Generate Korean-Style Message
+                    </button>
+
+                    <!-- Generated Output Preview -->
+                    <div class="border border-gray-200 rounded-xl p-6 bg-gray-50" data-mock="true">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="font-semibold text-gray-900">Generated Email</h4>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Tone: Appropriate</span>
+                                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">Formality: High</span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-white rounded-lg p-4 border border-gray-200">
+                            <div class="space-y-3 text-sm">
+                                <div><strong>Subject:</strong> <span data-bind="email.generatedSubject" data-mock="true">과제 질문에 관한 문의 (Question about Assignment)</span></div>
+                                <div class="border-t border-gray-200 pt-3">
+                                    <div data-bind="email.generatedContent" data-mock="true">
+                                        안녕하세요, 교수님.<br><br>
+                                        컴퓨터공학과 2학년 존 스미스입니다. 현재 수강 중인 데이터구조 과목의 과제에 대해 질문이 있어 이렇게 연락드립니다.<br><br>
+                                        과제의 요구사항 중 "효율적인 알고리즘 구현" 부분에서 구체적으로 어떤 방법을 사용해야 하는지 명확하지 않아 도움을 요청드리고 싶습니다. 제가 현재 생각하고 있는 접근법이 올바른 방향인지 확인하고 싶습니다.<br><br>
+                                        교수님의 시간이 허락하신다면, 간단한 상담 시간을 가질 수 있을까요?<br><br>
+                                        바쁘신 중에도 시간을 내어 읽어주셔서 감사합니다.<br><br>
+                                        존 스미스 드림<br>
+                                        컴퓨터공학과 2학년<br>
+                                        학번: 20220000
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cultural Context Explanations -->
+                        <div class="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                            <h5 class="font-medium text-amber-800 mb-2">
+                                <i class="fas fa-lightbulb mr-1"></i>
+                                Cultural Context Adjustments Made:
+                            </h5>
+                            <ul class="text-sm text-amber-700 space-y-1">
+                                <li data-mock="true">• Added formal greeting and self-introduction with department/year</li>
+                                <li data-mock="true">• Used humble expressions (문의드립니다, 요청드리고 싶습니다)</li>
+                                <li data-mock="true">• Included student ID for proper identification</li>
+                                <li data-mock="true">• Added polite closing acknowledging professor's busy schedule</li>
+                            </ul>
+                        </div>
+
+                        <div class="flex space-x-3 mt-4">
+                            <button class="flex-1 bg-primary text-white py-2 rounded-lg font-medium hover:bg-indigo-600 transition-colors" 
+                                    data-event="click:copyToClipboard">
+                                <i class="fas fa-copy mr-2"></i>
+                                Copy to Clipboard
+                            </button>
+                            <button class="flex-1 border border-gray-300 text-gray-700 py-2 rounded-lg font-medium hover:border-primary hover:text-primary transition-all" 
+                                    data-event="click:regenerateMessage">
+                                <i class="fas fa-redo mr-2"></i>
+                                Regenerate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: CommunicationHelperModal -->
+
+    <!-- FontAwesome Icons -->
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+    
+    <!-- JavaScript for UI interactions -->
+    <script>
+    (function() {
+        // TODO: Implement business logic, API calls, and state management
+        
+        // Modal management
+        const modals = {
+            onboarding: document.getElementById('onboarding-screen'),
+            dashboard: document.getElementById('main-dashboard'),
+            lectureReformatter: document.getElementById('lecture-reformatter-modal'),
+            emotionalTranslator: document.getElementById('emotional-translator-modal'),
+            communicationHelper: document.getElementById('communication-helper-modal')
+        };
+
+        // Show dashboard after onboarding
+        function completeOnboarding() {
+            modals.onboarding.classList.add('hidden');
+            modals.dashboard.classList.remove('hidden');
+            // TODO: Save user preferences to localStorage/backend
+        }
+
+        // Modal open/close functions
+        function openModal(modalName) {
+            modals[modalName].classList.remove('hidden');
+        }
+
+        function closeModal(modalName) {
+            modals[modalName].classList.add('hidden');
+        }
+
+        // Language selection
+        function selectLanguage(language) {
+            // TODO: Update UI language
+            document.querySelectorAll('[data-language]').forEach(btn => {
+                btn.classList.remove('border-primary', 'bg-primary', 'text-white');
+                btn.classList.add('border-gray-300', 'text-gray-700');
+            });
+            
+            event.target.classList.remove('border-gray-300', 'text-gray-700');
+            event.target.classList.add('border-primary', 'bg-primary', 'text-white');
+        }
+
+        // Communication type selection
+        function selectCommunicationType(type) {
+            document.querySelectorAll('[data-type]').forEach(btn => {
+                btn.classList.remove('border-primary', 'bg-primary', 'text-white');
+                btn.classList.add('border-gray-300', 'text-gray-700');
+            });
+            
+            event.target.closest('[data-type]').classList.remove('border-gray-300', 'text-gray-700');
+            event.target.closest('[data-type]').classList.add('border-primary', 'bg-primary', 'text-white');
+        }
+
+        // Event listeners
+        document.addEventListener('click', function(e) {
+            const target = e.target.closest('[data-event]');
+            if (!target) return;
+
+            const eventAction = target.getAttribute('data-event');
+            
+            switch(eventAction) {
+                case 'click:completeOnboarding':
+                    completeOnboarding();
+                    break;
+                case 'click:selectLanguage':
+                    selectLanguage(target.getAttribute('data-language'));
+                    break;
+                case 'click:openLectureReformatter':
+                    openModal('lectureReformatter');
+                    break;
+                case 'click:openEmotionalTranslator':
+                    openModal('emotionalTranslator');
+                    break;
+                case 'click:openCommunicationHelper':
+                    openModal('communicationHelper');
+                    break;
+                case 'click:closeLectureReformatter':
+                    closeModal('lectureReformatter');
+                    break;
+                case 'click:closeEmotionalTranslator':
+                    closeModal('emotionalTranslator');
+                    break;
+                case 'click:closeCommunicationHelper':
+                    closeModal('communicationHelper');
+                    break;
+                case 'click:selectCommunicationType':
+                    selectCommunicationType(target.getAttribute('data-type'));
+                    break;
+                case 'click:processLecture':
+                    // TODO: Implement lecture processing
+                    alert('Lecture processing would start here');
+                    break;
+                case 'click:sendMessage':
+                    // TODO: Implement chat message sending
+                    console.log('Send message functionality');
+                    break;
+                case 'click:generateCommunication':
+                    // TODO: Implement AI communication generation
+                    alert('AI communication generation would happen here');
+                    break;
+                case 'click:copyToClipboard':
+                    // TODO: Copy generated content to clipboard
+                    alert('Content copied to clipboard');
+                    break;
+            }
+        });
+
+        // Initialize app
+        function initializeApp() {
+            // Show onboarding by default
+            modals.onboarding.classList.remove('hidden');
+            modals.dashboard.classList.add('hidden');
+        }
+
+        initializeApp();
+    })();
+    </script>
+</body>
+</html>

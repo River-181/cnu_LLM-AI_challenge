@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniBuddy - 교수 소통 헬퍼</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cnu-navy': '#1E3A8A',
+                        'cnu-blue': '#3B82F6',
+                        'cnu-orange': '#F59E0B'
+                    },
+                    fontFamily: {
+                        'korean': ['Noto Sans KR', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 font-korean">
+    <!-- @COMPONENT: Header [university branding and navigation] -->
+    <header class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-4">
+                    <button class="p-2 rounded-lg hover:bg-gray-100 transition-colors" data-event="click:goBack">
+                        <i class="fas fa-arrow-left text-gray-600"></i>
+                    </button>
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-cnu-navy rounded-full flex items-center justify-center">
+                            <i class="fas fa-graduation-cap text-white text-sm"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-lg font-semibold text-gray-900">교수 소통 헬퍼</h1>
+                            <p class="text-sm text-gray-500">충남대학교 UniBuddy</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <!-- @STATE: currentLanguage:string = 'ko' -->
+                    <select class="text-sm border border-gray-300 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-cnu-blue focus:border-transparent">
+                        <option value="ko">한국어</option>
+                        <option value="en">English</option>
+                        <option value="zh">中文</option>
+                    </select>
+                    <button class="p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                        <i class="fas fa-user-circle text-gray-600 text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- @END_COMPONENT: Header -->
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <!-- @COMPONENT: TabNavigation [3 main feature tabs] -->
+        <div class="mb-6">
+            <nav class="flex space-x-1 bg-gray-100 p-1 rounded-xl">
+                <!-- @STATE: activeTab:string = 'cultural-translation' -->
+                <button class="flex-1 px-4 py-2.5 text-sm font-medium rounded-lg bg-white text-cnu-navy shadow-sm border border-gray-200 transition-all" data-event="click:setActiveTab" data-tab="cultural-translation">
+                    <i class="fas fa-language mr-2"></i>
+                    문화 맥락 번역
+                </button>
+                <button class="flex-1 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-all" data-event="click:setActiveTab" data-tab="email-templates">
+                    <i class="fas fa-envelope mr-2"></i>
+                    이메일 템플릿
+                </button>
+                <button class="flex-1 px-4 py-2.5 text-sm font-medium rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-all" data-event="click:setActiveTab" data-tab="presentation-script">
+                    <i class="fas fa-presentation mr-2"></i>
+                    발표 스크립트
+                </button>
+            </nav>
+        </div>
+        <!-- @END_COMPONENT: TabNavigation -->
+
+        <!-- @COMPONENT: MainTranslationInterface [split panel for input/output] -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- Left Input Panel -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">직설적 표현 입력</h3>
+                    <div class="flex items-center space-x-2">
+                        <button class="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 transition-colors" data-event="click:clearInput">
+                            <i class="fas fa-trash text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="relative">
+                    <textarea 
+                        class="w-full h-32 p-4 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-cnu-blue focus:border-transparent" 
+                        placeholder="예: 교수님, 제 의견은 틀렸다고 생각해요"
+                        data-bind="inputText"
+                        data-mock="true">교수님, 제 의견은 틀렸다고 생각해요</textarea>
+                    
+                    <!-- Voice Input Controls -->
+                    <div class="absolute bottom-3 right-3 flex items-center space-x-2">
+                        <button class="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors" data-event="click:playInputAudio" data-implementation="TTS playback of input text">
+                            <i class="fas fa-volume-up text-gray-600"></i>
+                        </button>
+                        <button class="p-2 rounded-lg bg-cnu-blue text-white hover:bg-blue-600 transition-colors" data-event="click:startVoiceInput" data-implementation="Speech-to-text input">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex items-center justify-between">
+                    <div class="text-sm text-gray-500">
+                        <span data-bind="inputCharCount">22</span>/500 글자
+                    </div>
+                    <button class="px-4 py-2 bg-cnu-navy text-white rounded-lg hover:bg-blue-900 transition-colors" data-event="click:translateText" data-implementation="Send text for cultural translation">
+                        <i class="fas fa-arrow-right mr-2"></i>
+                        번역하기
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Output Panel -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">한국 문화적 완곡 표현</h3>
+                    <div class="flex items-center space-x-2">
+                        <button class="p-2 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 transition-colors" data-event="click:copyOutput" data-implementation="Copy translated text to clipboard">
+                            <i class="fas fa-copy text-sm"></i>
+                        </button>
+                        <button class="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors" data-event="click:saveToFavorites">
+                            <i class="fas fa-star text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="min-h-32 p-4 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+                        <!-- @STATE: translatedText:string = '' -->
+                        <p class="text-gray-900 leading-relaxed" data-bind="translatedText" data-mock="true">
+                            교수님, 제가 생각하기로는 다른 관점도 있을 것 같습니다. 혹시 이에 대해 더 자세히 설명해 주실 수 있을까요?
+                        </p>
+                    </div>
+
+                    <!-- Main TTS Controls -->
+                    <div class="absolute bottom-3 right-3">
+                        <!-- @STATE: isPlaying:boolean = false -->
+                        <button class="p-3 rounded-full bg-cnu-orange text-white hover:bg-yellow-600 transition-all shadow-lg" data-event="click:toggleTTSPlayback" data-implementation="Main TTS playback toggle">
+                            <i class="fas fa-volume-up text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Advanced Audio Controls -->
+                <div class="mt-6 space-y-4">
+                    <!-- Pronunciation Guide -->
+                    <div class="bg-blue-50 rounded-lg p-4">
+                        <h4 class="font-medium text-blue-900 mb-2">발음 가이드</h4>
+                        <div class="flex items-center space-x-3">
+                            <span class="text-blue-800 font-korean">"생각하기로는"</span>
+                            <span class="text-blue-600 text-sm font-mono">[saeng-gak-ha-gi-ro-neun]</span>
+                            <button class="p-1.5 rounded bg-blue-100 hover:bg-blue-200 transition-colors" data-event="click:playPronunciation" data-implementation="Play specific word pronunciation">
+                                <i class="fas fa-volume-up text-blue-600 text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Playback Controls -->
+                    <div class="flex items-center justify-between bg-gray-50 rounded-lg p-4">
+                        <div class="flex items-center space-x-4">
+                            <button class="p-2 rounded-lg bg-white shadow-sm hover:shadow transition-all" data-event="click:previousSentence">
+                                <i class="fas fa-step-backward text-gray-600"></i>
+                            </button>
+                            <button class="p-2 rounded-lg bg-white shadow-sm hover:shadow transition-all" data-event="click:togglePlayPause">
+                                <i class="fas fa-play text-gray-600"></i>
+                            </button>
+                            <button class="p-2 rounded-lg bg-white shadow-sm hover:shadow transition-all" data-event="click:nextSentence">
+                                <i class="fas fa-step-forward text-gray-600"></i>
+                            </button>
+                            <button class="p-2 rounded-lg bg-white shadow-sm hover:shadow transition-all" data-event="click:toggleRepeat">
+                                <i class="fas fa-redo text-cnu-orange"></i>
+                            </button>
+                        </div>
+
+                        <!-- Speed Control -->
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm text-gray-600">속도</span>
+                            <!-- @STATE: playbackSpeed:number = 1.0 -->
+                            <select class="text-sm border border-gray-300 rounded px-2 py-1 focus:ring-2 focus:ring-cnu-blue" data-bind="playbackSpeed">
+                                <option value="0.5">0.5x</option>
+                                <option value="0.75">0.75x</option>
+                                <option value="1.0" selected>1.0x</option>
+                                <option value="1.25">1.25x</option>
+                                <option value="1.5">1.5x</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: MainTranslationInterface -->
+
+        <!-- @COMPONENT: AdditionalHelpSections [voice-enabled help cards] -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Korean Presentation Manner Guide -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="font-semibold text-gray-900">한국식 발표 매너 가이드</h4>
+                    <button class="p-2 rounded-lg bg-green-50 text-green-600 hover:bg-green-100 transition-colors" data-event="click:playPresentationGuide" data-implementation="Play presentation manner audio guide">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+                
+                <div class="space-y-3">
+                    <!-- @MAP: presentationExamples.map(example => ( -->
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg" data-mock="true">
+                        <span class="text-sm text-gray-700">"안녕하세요, 오늘 발표를 맡은 김○○입니다"</span>
+                        <button class="p-1.5 rounded bg-green-100 hover:bg-green-200 transition-colors" data-event="click:playExample" data-implementation="Play specific example">
+                            <i class="fas fa-play text-green-600 text-xs"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg" data-mock="true">
+                        <span class="text-sm text-gray-700">"교수님께 질문이 있습니다"</span>
+                        <button class="p-1.5 rounded bg-green-100 hover:bg-green-200 transition-colors" data-event="click:playExample">
+                            <i class="fas fa-play text-green-600 text-xs"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg" data-mock="true">
+                        <span class="text-sm text-gray-700">"다른 의견도 있을 것 같습니다"</span>
+                        <button class="p-1.5 rounded bg-green-100 hover:bg-green-200 transition-colors" data-event="click:playExample">
+                            <i class="fas fa-play text-green-600 text-xs"></i>
+                        </button>
+                    </div>
+                    <!-- @END_MAP )) -->
+                </div>
+                
+                <button class="w-full mt-4 px-4 py-2 text-sm text-green-700 bg-green-50 rounded-lg hover:bg-green-100 transition-colors" data-event="click:viewFullGuide">
+                    전체 가이드 보기
+                </button>
+            </div>
+
+            <!-- Professor Communication Tips -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="font-semibold text-gray-900">교수 소통 방식 팁</h4>
+                    <button class="p-2 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors" data-event="click:playCommTips" data-implementation="Play communication tips audio">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+                
+                <div class="space-y-3">
+                    <div class="flex items-start space-x-3">
+                        <div class="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-0.5">
+                            <i class="fas fa-envelope text-blue-600 text-xs"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h5 class="text-sm font-medium text-gray-900">이메일 문의</h5>
+                            <p class="text-xs text-gray-600 mt-1">정중하고 명확한 표현 사용</p>
+                            <button class="mt-2 text-xs text-blue-600 hover:text-blue-800" data-event="click:playEmailTips">
+                                <i class="fas fa-play mr-1"></i>예시 듣기
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3">
+                        <div class="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-0.5">
+                            <i class="fas fa-comments text-blue-600 text-xs"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h5 class="text-sm font-medium text-gray-900">면담 요청</h5>
+                            <p class="text-xs text-gray-600 mt-1">예의바른 시간 협의 방법</p>
+                            <button class="mt-2 text-xs text-blue-600 hover:text-blue-800" data-event="click:playMeetingTips">
+                                <i class="fas fa-play mr-1"></i>예시 듣기
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3">
+                        <div class="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mt-0.5">
+                            <i class="fas fa-question-circle text-blue-600 text-xs"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h5 class="text-sm font-medium text-gray-900">과제 질문</h5>
+                            <p class="text-xs text-gray-600 mt-1">적절한 억양과 톤으로 질문</p>
+                            <button class="mt-2 text-xs text-blue-600 hover:text-blue-800" data-event="click:playQuestionTips">
+                                <i class="fas fa-play mr-1"></i>예시 듣기
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 20s College Expression Dictionary -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                <div class="flex items-center justify-between mb-4">
+                    <h4 class="font-semibold text-gray-900">20대 대학생 표현 사전</h4>
+                    <button class="p-2 rounded-lg bg-purple-50 text-purple-600 hover:bg-purple-100 transition-colors" data-event="click:playExpressionDict" data-implementation="Play expression dictionary audio">
+                        <i class="fas fa-volume-up"></i>
+                    </button>
+                </div>
+                
+                <div class="space-y-3">
+                    <div class="p-3 bg-purple-50 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-purple-900">친근한 인사</span>
+                            <button class="p-1 rounded bg-purple-100 hover:bg-purple-200 transition-colors" data-event="click:playGreeting">
+                                <i class="fas fa-play text-purple-600 text-xs"></i>
+                            </button>
+                        </div>
+                        <p class="text-xs text-purple-700 mt-1">"안녕하세요" → "안녕하세요, 잘 지내셨어요?"</p>
+                    </div>
+                    
+                    <div class="p-3 bg-purple-50 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-purple-900">동의 표현</span>
+                            <button class="p-1 rounded bg-purple-100 hover:bg-purple-200 transition-colors" data-event="click:playAgreement">
+                                <i class="fas fa-play text-purple-600 text-xs"></i>
+                            </button>
+                        </div>
+                        <p class="text-xs text-purple-700 mt-1">"맞아요" → "그렇게 생각해요"</p>
+                    </div>
+                    
+                    <div class="p-3 bg-purple-50 rounded-lg">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm font-medium text-purple-900">의견 제시</span>
+                            <button class="p-1 rounded bg-purple-100 hover:bg-purple-200 transition-colors" data-event="click:playOpinion">
+                                <i class="fas fa-play text-purple-600 text-xs"></i>
+                            </button>
+                        </div>
+                        <p class="text-xs text-purple-700 mt-1">"제 생각에는" → "개인적으로는"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: AdditionalHelpSections -->
+
+        <!-- @COMPONENT: AudioControlsFooter [global audio settings] -->
+        <div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <h4 class="font-semibold text-gray-900">오디오 설정</h4>
+                    <div class="flex items-center space-x-2">
+                        <label class="text-sm text-gray-600">음성 품질:</label>
+                        <!-- @STATE: audioQuality:string = 'high' -->
+                        <select class="text-sm border border-gray-300 rounded px-2 py-1" data-bind="audioQuality">
+                            <option value="high">고품질</option>
+                            <option value="normal">일반</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-volume-down text-gray-400"></i>
+                        <!-- @STATE: masterVolume:number = 75 -->
+                        <input type="range" class="w-20" min="0" max="100" value="75" data-bind="masterVolume" data-implementation="Master volume control">
+                        <i class="fas fa-volume-up text-gray-600"></i>
+                    </div>
+                    
+                    <button class="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors" data-event="click:clearAudioHistory" data-implementation="Clear audio playback history">
+                        <i class="fas fa-history mr-2"></i>
+                        재생 기록 삭제
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: AudioControlsFooter -->
+    </main>
+
+    <!-- @COMPONENT: FloatingActionButton [quick access to voice features] -->
+    <div class="fixed bottom-6 right-6">
+        <button class="w-14 h-14 bg-cnu-orange text-white rounded-full shadow-lg hover:bg-yellow-600 hover:scale-105 transition-all" data-event="click:quickVoiceInput" data-implementation="Quick voice input access">
+            <i class="fas fa-microphone text-xl"></i>
+        </button>
+    </div>
+    <!-- @END_COMPONENT: FloatingActionButton -->
+
+    <script>
+        // TODO: Implement TTS functionality using Web Speech API or external service
+        // TODO: Implement Speech-to-Text for voice input
+        // TODO: Implement audio playback controls (play/pause/stop/speed)
+        // TODO: Implement pronunciation guide audio
+        // TODO: Implement cultural translation logic
+        // TODO: Implement user preferences saving
+        // TODO: Implement accessibility keyboard shortcuts
+        
+        (function() {
+            // Placeholder for TTS and voice functionality
+            let isPlaying = false;
+            let currentSpeed = 1.0;
+            
+            // Simulated audio controls
+            function togglePlayback() {
+                isPlaying = !isPlaying;
+                console.log('Audio playback toggled:', isPlaying);
+                // TODO: Implement actual TTS playback
+            }
+            
+            function setPlaybackSpeed(speed) {
+                currentSpeed = speed;
+                console.log('Playback speed set to:', speed);
+                // TODO: Update TTS playback speed
+            }
+            
+            // Tab switching functionality
+            function switchTab(tabName) {
+                console.log('Switching to tab:', tabName);
+                // TODO: Implement tab content switching
+            }
+            
+            // Voice input simulation
+            function startVoiceInput() {
+                console.log('Starting voice input...');
+                // TODO: Implement Speech-to-Text
+            }
+            
+            // Cultural translation simulation
+            function translateText() {
+                console.log('Translating text with cultural context...');
+                // TODO: Implement cultural translation API call
+            }
+        })();
+    </script>
+</body>
+</html>

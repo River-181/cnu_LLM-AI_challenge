@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniBuddy - Welcome Setup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cnu-blue': {
+                            '600': '#1E3A8A',
+                            '500': '#3B82F6',
+                            '50': '#EFF6FF'
+                        },
+                        'cnu-orange': {
+                            '600': '#EA580C',
+                            '500': '#F97316',
+                            '50': '#FFF7ED'
+                        }
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'system-ui', 'sans-serif']
+                    },
+                    animation: {
+                        'dropdown-open': 'dropdownOpen 0.2s ease-out',
+                        'fade-in': 'fadeIn 0.3s ease-out'
+                    },
+                    keyframes: {
+                        dropdownOpen: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px) scaleY(0.8)' },
+                            '100%': { opacity: '1', transform: 'translateY(0) scaleY(1)' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="font-inter bg-gradient-to-br from-cnu-blue-600 via-cnu-blue-500 to-blue-600 min-h-screen flex items-center justify-center p-4">
+    
+    <!-- @COMPONENT: WelcomeSetupCard [Main setup interface for new users] -->
+    <div class="w-full max-w-md mx-auto animate-fade-in">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
+            
+            <!-- @COMPONENT: BrandHeader [University branding and welcome message] -->
+            <div class="text-center mb-8">
+                <!-- Graduation Cap Icon -->
+                <div class="w-16 h-16 bg-cnu-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    <i class="fas fa-graduation-cap text-white text-2xl"></i>
+                </div>
+                
+                <h1 class="text-2xl font-bold text-gray-900 mb-2">Welcome to UniBuddy</h1>
+                <p class="text-gray-600 text-sm font-medium">Chungnam National University</p>
+                <p class="text-gray-500 text-xs mt-1">Your AI companion for academic and emotional support</p>
+            </div>
+            <!-- @END_COMPONENT: BrandHeader -->
+
+            <!-- @COMPONENT: SetupForm [User preference collection form] -->
+            <div class="space-y-6">
+                
+                <!-- Name Input Field -->
+                <div>
+                    <label for="username" class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-user text-cnu-blue-500 mr-2"></i>
+                        What should we call you?
+                    </label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        placeholder="Enter your preferred name"
+                        data-bind="user.preferredName"
+                        data-mock="true"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cnu-blue-500 focus:border-cnu-blue-500 transition-colors placeholder-gray-400 text-gray-900"
+                    />
+                </div>
+
+                <!-- Language Selection Dropdown -->
+                <div class="relative">
+                    <label for="language" class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-globe text-cnu-blue-500 mr-2"></i>
+                        Choose your preferred language
+                    </label>
+                    
+                    <!-- @STATE: isDropdownOpen:boolean = true (shown in expanded state) -->
+                    <!-- Dropdown Button -->
+                    <button 
+                        id="languageDropdown"
+                        data-event="click:toggleDropdown"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white text-left flex items-center justify-between focus:ring-2 focus:ring-cnu-blue-500 focus:border-cnu-blue-500 transition-colors"
+                    >
+                        <span class="text-gray-900" data-bind="selectedLanguage.display" data-mock="true">Select Language</span>
+                        <i class="fas fa-chevron-up text-gray-400 transition-transform duration-200"></i>
+                    </button>
+
+                    <!-- Expanded Dropdown Menu -->
+                    <div class="absolute top-full left-0 right-0 z-50 bg-white border border-gray-200 rounded-lg shadow-lg mt-1 animate-dropdown-open max-h-64 overflow-y-auto">
+                        <!-- @MAP: availableLanguages.map(language => ( -->
+                        
+                        <!-- English -->
+                        <div class="px-4 py-3 hover:bg-cnu-blue-50 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0" data-event="click:selectLanguage" data-value="en">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-900 font-medium">English</span>
+                                <span class="text-sm text-gray-500">EN</span>
+                            </div>
+                        </div>
+
+                        <!-- Korean -->
+                        <div class="px-4 py-3 hover:bg-cnu-blue-50 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0" data-event="click:selectLanguage" data-value="ko">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-900 font-medium">한국어</span>
+                                <span class="text-sm text-gray-500">KO</span>
+                            </div>
+                        </div>
+
+                        <!-- Chinese -->
+                        <div class="px-4 py-3 hover:bg-cnu-blue-50 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0" data-event="click:selectLanguage" data-value="zh">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-900 font-medium">中文</span>
+                                <span class="text-sm text-gray-500">ZH</span>
+                            </div>
+                        </div>
+
+                        <!-- Japanese -->
+                        <div class="px-4 py-3 hover:bg-cnu-blue-50 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0" data-event="click:selectLanguage" data-value="ja">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-900 font-medium">日本語</span>
+                                <span class="text-sm text-gray-500">JA</span>
+                            </div>
+                        </div>
+
+                        <!-- Vietnamese -->
+                        <div class="px-4 py-3 hover:bg-cnu-blue-50 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0" data-event="click:selectLanguage" data-value="vi">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-900 font-medium">Tiếng Việt</span>
+                                <span class="text-sm text-gray-500">VI</span>
+                            </div>
+                        </div>
+
+                        <!-- Thai -->
+                        <div class="px-4 py-3 hover:bg-cnu-blue-50 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0" data-event="click:selectLanguage" data-value="th">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-900 font-medium">ภาษาไทย</span>
+                                <span class="text-sm text-gray-500">TH</span>
+                            </div>
+                        </div>
+
+                        <!-- Indonesian -->
+                        <div class="px-4 py-3 hover:bg-cnu-blue-50 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0" data-event="click:selectLanguage" data-value="id">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-900 font-medium">Bahasa Indonesia</span>
+                                <span class="text-sm text-gray-500">ID</span>
+                            </div>
+                        </div>
+
+                        <!-- Spanish -->
+                        <div class="px-4 py-3 hover:bg-cnu-blue-50 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0" data-event="click:selectLanguage" data-value="es">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-900 font-medium">Español</span>
+                                <span class="text-sm text-gray-500">ES</span>
+                            </div>
+                        </div>
+
+                        <!-- French -->
+                        <div class="px-4 py-3 hover:bg-cnu-blue-50 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0" data-event="click:selectLanguage" data-value="fr">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-900 font-medium">Français</span>
+                                <span class="text-sm text-gray-500">FR</span>
+                            </div>
+                        </div>
+
+                        <!-- German -->
+                        <div class="px-4 py-3 hover:bg-cnu-blue-50 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0" data-event="click:selectLanguage" data-value="de">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-900 font-medium">Deutsch</span>
+                                <span class="text-sm text-gray-500">DE</span>
+                            </div>
+                        </div>
+
+                        <!-- Russian -->
+                        <div class="px-4 py-3 hover:bg-cnu-blue-50 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0" data-event="click:selectLanguage" data-value="ru">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-900 font-medium">Русский</span>
+                                <span class="text-sm text-gray-500">RU</span>
+                            </div>
+                        </div>
+
+                        <!-- Arabic -->
+                        <div class="px-4 py-3 hover:bg-cnu-blue-50 cursor-pointer transition-colors border-b border-gray-100 last:border-b-0" data-event="click:selectLanguage" data-value="ar">
+                            <div class="flex items-center justify-between">
+                                <span class="text-gray-900 font-medium">العربية</span>
+                                <span class="text-sm text-gray-500">AR</span>
+                            </div>
+                        </div>
+
+                        <!-- @END_MAP )) -->
+                    </div>
+                </div>
+
+                <!-- CNU Services Integration Info -->
+                <!-- @COMPONENT: ServiceIntegrationInfo [Display university service connections] -->
+                <div class="bg-cnu-blue-50 border border-cnu-blue-200 rounded-lg p-4">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-check-circle text-cnu-blue-600 text-lg mt-0.5"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-semibold text-cnu-blue-800">Connected to CNU Services</h3>
+                            <p class="text-xs text-cnu-blue-700 mt-1 leading-relaxed">
+                                UniBuddy integrates with International Affairs Office, Student Counseling Center, 
+                                and Academic Support services to provide comprehensive assistance.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: ServiceIntegrationInfo -->
+
+                <!-- Get Started Button -->
+                <button 
+                    data-event="click:handleGetStarted"
+                    data-implementation="Should validate form and initialize user preferences"
+                    class="w-full bg-gradient-to-r from-cnu-orange-600 to-cnu-orange-500 text-white font-semibold py-4 px-6 rounded-lg hover:from-cnu-orange-700 hover:to-cnu-orange-600 focus:ring-4 focus:ring-cnu-orange-200 focus:outline-none transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                >
+                    <i class="fas fa-arrow-right mr-2"></i>
+                    Get Started with UniBuddy
+                </button>
+
+            </div>
+            <!-- @END_COMPONENT: SetupForm -->
+
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center mt-6">
+            <p class="text-white/80 text-xs">
+                GDPR & PIPA Compliant • Secure & Private
+            </p>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: WelcomeSetupCard -->
+
+    <script>
+        (function() {
+            // TODO: Implement dropdown functionality, form validation, and user preference persistence
+            // TODO: Add internationalization support for UI elements
+            // TODO: Connect to university authentication systems
+            // TODO: Implement accessibility features for screen readers
+            
+            // Mock dropdown interaction for demo purposes
+            const dropdownButton = document.getElementById('languageDropdown');
+            const dropdownMenu = dropdownButton.nextElementSibling;
+            const chevronIcon = dropdownButton.querySelector('.fas');
+            
+            // Language selection handling
+            const languageOptions = dropdownMenu.querySelectorAll('[data-event="click:selectLanguage"]');
+            languageOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const selectedText = this.querySelector('span').textContent;
+                    dropdownButton.querySelector('span').textContent = selectedText;
+                    dropdownMenu.style.display = 'none';
+                    chevronIcon.classList.remove('fa-chevron-up');
+                    chevronIcon.classList.add('fa-chevron-down');
+                });
+            });
+
+            // Form submission handling
+            document.querySelector('[data-event="click:handleGetStarted"]').addEventListener('click', function() {
+                // TODO: Validate form inputs and save user preferences
+                console.log('Setup completed - redirect to main application');
+            });
+        })();
+    </script>
+
+</body>
+</html>

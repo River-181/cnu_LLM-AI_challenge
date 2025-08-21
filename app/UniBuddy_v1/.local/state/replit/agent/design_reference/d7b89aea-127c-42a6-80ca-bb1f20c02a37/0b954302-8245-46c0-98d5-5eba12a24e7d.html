@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniBuddy - AI Companion for International Students</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    'primary': '#1976D2',
+                    'primary-light': '#42A5F5',
+                    'primary-dark': '#1565C0',
+                    'secondary': '#388E3C',
+                    'accent': '#FF7043',
+                    'surface': '#FAFAFA',
+                    'on-surface': '#212121',
+                    'on-primary': '#FFFFFF'
+                },
+                fontFamily: {
+                    'roboto': ['Roboto', 'sans-serif']
+                },
+                spacing: {
+                    '18': '4.5rem',
+                    '72': '18rem',
+                    '84': '21rem',
+                    '96': '24rem'
+                }
+            }
+        }
+    };
+    </script>
+</head>
+<body class="font-roboto bg-surface text-on-surface min-h-screen">
+    <!-- @COMPONENT: AppShell [Main application container] -->
+    <div id="app-container" class="min-h-screen">
+        
+        <!-- Initial Setup Screen -->
+        <!-- @COMPONENT: OnboardingScreen [Initial setup for new users] -->
+        <div id="onboarding-screen" class="min-h-screen bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-8 transform transition-all duration-500">
+                <!-- Logo and Welcome -->
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="material-icons text-white text-3xl">psychology</span>
+                    </div>
+                    <h1 class="text-2xl font-bold text-on-surface mb-2" data-bind="translations.welcome">Welcome to UniBuddy</h1>
+                    <p class="text-gray-600" data-bind="translations.subtitle">Your AI companion for academic success</p>
+                </div>
+
+                <!-- Name Input -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2" data-bind="translations.nameLabel">What should we call you?</label>
+                    <input 
+                        type="text" 
+                        placeholder="Enter your preferred name"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
+                        data-bind="userProfile.name"
+                        data-mock="true"
+                    />
+                </div>
+
+                <!-- Language Selection -->
+                <div class="mb-8">
+                    <label class="block text-sm font-medium text-gray-700 mb-3" data-bind="translations.languageLabel">Choose your language</label>
+                    <div class="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
+                        <!-- @MAP: supportedLanguages.map(language => ( -->
+                        <button class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-primary hover:text-white transition-colors text-left" data-event="click:selectLanguage" data-mock="true">
+                            <span class="text-xl mr-3">🇺🇸</span>
+                            <span class="font-medium">English</span>
+                        </button>
+                        <button class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-primary hover:text-white transition-colors text-left" data-mock="true">
+                            <span class="text-xl mr-3">🇰🇷</span>
+                            <span class="font-medium">한국어</span>
+                        </button>
+                        <button class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-primary hover:text-white transition-colors text-left" data-mock="true">
+                            <span class="text-xl mr-3">🇨🇳</span>
+                            <span class="font-medium">中文</span>
+                        </button>
+                        <button class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-primary hover:text-white transition-colors text-left" data-mock="true">
+                            <span class="text-xl mr-3">🇯🇵</span>
+                            <span class="font-medium">日本語</span>
+                        </button>
+                        <button class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-primary hover:text-white transition-colors text-left" data-mock="true">
+                            <span class="text-xl mr-3">🇻🇳</span>
+                            <span class="font-medium">Tiếng Việt</span>
+                        </button>
+                        <button class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-primary hover:text-white transition-colors text-left" data-mock="true">
+                            <span class="text-xl mr-3">🇹🇭</span>
+                            <span class="font-medium">ไทย</span>
+                        </button>
+                        <button class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-primary hover:text-white transition-colors text-left" data-mock="true">
+                            <span class="text-xl mr-3">🇮🇩</span>
+                            <span class="font-medium">Bahasa</span>
+                        </button>
+                        <button class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-primary hover:text-white transition-colors text-left" data-mock="true">
+                            <span class="text-xl mr-3">🇪🇸</span>
+                            <span class="font-medium">Español</span>
+                        </button>
+                        <button class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-primary hover:text-white transition-colors text-left" data-mock="true">
+                            <span class="text-xl mr-3">🇫🇷</span>
+                            <span class="font-medium">Français</span>
+                        </button>
+                        <button class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-primary hover:text-white transition-colors text-left" data-mock="true">
+                            <span class="text-xl mr-3">🇩🇪</span>
+                            <span class="font-medium">Deutsch</span>
+                        </button>
+                        <button class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-primary hover:text-white transition-colors text-left" data-mock="true">
+                            <span class="text-xl mr-3">🇷🇺</span>
+                            <span class="font-medium">Русский</span>
+                        </button>
+                        <button class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-primary hover:text-white transition-colors text-left" data-mock="true">
+                            <span class="text-xl mr-3">🇸🇦</span>
+                            <span class="font-medium">العربية</span>
+                        </button>
+                        <!-- @END_MAP )) -->
+                    </div>
+                </div>
+
+                <!-- Continue Button -->
+                <button 
+                    class="w-full bg-primary text-white py-3 px-6 rounded-lg font-medium hover:bg-primary-dark transition-colors shadow-lg"
+                    data-event="click:completeOnboarding"
+                    data-implementation="Should save user preferences and navigate to main app"
+                >
+                    Get Started
+                </button>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: OnboardingScreen -->
+
+        <!-- Main Application -->
+        <!-- @COMPONENT: MainApp [Primary application interface] -->
+        <div id="main-app" class="hidden min-h-screen">
+            <!-- Top Navigation -->
+            <!-- @COMPONENT: TopNavigation [Main navigation header] -->
+            <nav class="bg-white shadow-sm border-b border-gray-200 px-4 py-3">
+                <div class="max-w-7xl mx-auto flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <button class="md:hidden p-2" data-event="click:toggleSidebar">
+                            <span class="material-icons">menu</span>
+                        </button>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                                <span class="material-icons text-white text-sm">psychology</span>
+                            </div>
+                            <h1 class="text-xl font-bold text-primary">UniBuddy</h1>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4">
+                        <!-- Language Switcher -->
+                        <div class="relative">
+                            <button class="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors" data-event="click:toggleLanguageMenu">
+                                <span class="text-lg">🇺🇸</span>
+                                <span class="hidden sm:inline">EN</span>
+                                <span class="material-icons text-sm">expand_more</span>
+                            </button>
+                        </div>
+
+                        <!-- User Profile -->
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
+                                <span class="text-white font-medium text-sm" data-bind="userProfile.initials">JS</span>
+                            </div>
+                            <span class="hidden sm:inline font-medium" data-bind="userProfile.name" data-mock="true">John Smith</span>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <!-- @END_COMPONENT: TopNavigation -->
+
+            <div class="flex min-h-screen">
+                <!-- Sidebar Navigation -->
+                <!-- @COMPONENT: Sidebar [Main navigation menu] -->
+                <aside class="hidden md:block w-64 bg-white border-r border-gray-200">
+                    <div class="p-4">
+                        <nav class="space-y-2">
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg bg-primary text-white" data-navigation="dashboard">
+                                <span class="material-icons">dashboard</span>
+                                <span>Dashboard</span>
+                            </a>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors" data-navigation="lecture-reformatter">
+                                <span class="material-icons">school</span>
+                                <span>Lecture Reformatter</span>
+                            </a>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors" data-navigation="emotional-translator">
+                                <span class="material-icons">favorite</span>
+                                <span>Emotional Support</span>
+                            </a>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors" data-navigation="communication-helper">
+                                <span class="material-icons">chat</span>
+                                <span>Communication Helper</span>
+                            </a>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors" data-navigation="progress">
+                                <span class="material-icons">analytics</span>
+                                <span>Progress Tracking</span>
+                            </a>
+                            <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors" data-navigation="resources">
+                                <span class="material-icons">library_books</span>
+                                <span>Campus Resources</span>
+                            </a>
+                        </nav>
+                    </div>
+                </aside>
+                <!-- @END_COMPONENT: Sidebar -->
+
+                <!-- Main Content Area -->
+                <main class="flex-1 p-6">
+                    <!-- Dashboard View -->
+                    <!-- @COMPONENT: Dashboard [Main dashboard view] -->
+                    <div id="dashboard-view" class="max-w-7xl mx-auto">
+                        <!-- Welcome Section -->
+                        <div class="mb-8">
+                            <h2 class="text-3xl font-bold text-on-surface mb-2" data-bind="greetingMessage" data-mock="true">Good morning, John! 👋</h2>
+                            <p class="text-gray-600">How are you feeling today? I'm here to help you succeed.</p>
+                        </div>
+
+                        <!-- Quick Action Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                            <!-- Lecture Upload Card -->
+                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                                        <span class="material-icons text-primary">upload</span>
+                                    </div>
+                                    <h3 class="ml-3 text-lg font-semibold">Upload Lecture</h3>
+                                </div>
+                                <p class="text-gray-600 mb-4">Transform your lecture materials into personalized study resources.</p>
+                                <button class="w-full bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary-dark transition-colors" data-event="click:openLectureReformatter">
+                                    Get Started
+                                </button>
+                            </div>
+
+                            <!-- Emotional Support Card -->
+                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-12 h-12 bg-secondary/10 rounded-lg flex items-center justify-center">
+                                        <span class="material-icons text-secondary">psychology</span>
+                                    </div>
+                                    <h3 class="ml-3 text-lg font-semibold">Talk to Me</h3>
+                                </div>
+                                <p class="text-gray-600 mb-4">Share your feelings and get personalized emotional support.</p>
+                                <button class="w-full bg-secondary text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors" data-event="click:openEmotionalTranslator">
+                                    Start Conversation
+                                </button>
+                            </div>
+
+                            <!-- Communication Helper Card -->
+                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center">
+                                        <span class="material-icons text-accent">edit</span>
+                                    </div>
+                                    <h3 class="ml-3 text-lg font-semibold">Communication Helper</h3>
+                                </div>
+                                <p class="text-gray-600 mb-4">Get help with emails, presentations, and academic communication.</p>
+                                <button class="w-full bg-accent text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-colors" data-event="click:openCommunicationHelper">
+                                    Create Template
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Recent Activity & Progress -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <!-- Recent Activity -->
+                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                                <h3 class="text-lg font-semibold mb-4">Recent Activity</h3>
+                                <div class="space-y-3">
+                                    <!-- @MAP: recentActivities.map(activity => ( -->
+                                    <div class="flex items-center space-x-3 p-3 rounded-lg bg-gray-50" data-mock="true">
+                                        <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                                            <span class="material-icons text-primary text-sm">school</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="font-medium text-sm">Processed Physics Lecture</p>
+                                            <p class="text-xs text-gray-500">2 hours ago</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-3 p-3 rounded-lg bg-gray-50" data-mock="true">
+                                        <div class="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center">
+                                            <span class="material-icons text-secondary text-sm">favorite</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="font-medium text-sm">Emotional Check-in</p>
+                                            <p class="text-xs text-gray-500">5 hours ago</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-3 p-3 rounded-lg bg-gray-50" data-mock="true">
+                                        <div class="w-8 h-8 bg-accent/10 rounded-full flex items-center justify-center">
+                                            <span class="material-icons text-accent text-sm">email</span>
+                                        </div>
+                                        <div class="flex-1">
+                                            <p class="font-medium text-sm">Email to Professor Kim</p>
+                                            <p class="text-xs text-gray-500">1 day ago</p>
+                                        </div>
+                                    </div>
+                                    <!-- @END_MAP )) -->
+                                </div>
+                            </div>
+
+                            <!-- Well-being Dashboard -->
+                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                                <h3 class="text-lg font-semibold mb-4">Well-being Overview</h3>
+                                
+                                <!-- Mood Indicator -->
+                                <div class="mb-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-sm font-medium">Current Mood</span>
+                                        <span class="text-sm text-secondary font-medium" data-mock="true">Good 😊</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-gradient-to-r from-secondary to-green-400 h-2 rounded-full" style="width: 75%" data-bind="moodPercentage"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Study Progress -->
+                                <div class="mb-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-sm font-medium">Study Progress</span>
+                                        <span class="text-sm text-primary font-medium" data-mock="true">3 of 5 tasks</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-gradient-to-r from-primary to-primary-light h-2 rounded-full" style="width: 60%" data-bind="studyProgress"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Campus Connection -->
+                                <div>
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-sm font-medium">Campus Connection</span>
+                                        <span class="text-sm text-accent font-medium" data-mock="true">Active</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-gradient-to-r from-accent to-orange-400 h-2 rounded-full" style="width: 85%" data-bind="connectionLevel"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_COMPONENT: Dashboard -->
+
+                    <!-- Lecture Reformatter View -->
+                    <!-- @COMPONENT: LectureReformatter [F1 - AI Lecture processing interface] -->
+                    <div id="lecture-reformatter-view" class="hidden max-w-4xl mx-auto">
+                        <div class="mb-6">
+                            <h2 class="text-2xl font-bold text-on-surface mb-2">AI Lecture Reformatter</h2>
+                            <p class="text-gray-600">Transform your lecture materials into personalized study resources with AI-powered analysis.</p>
+                        </div>
+
+                        <!-- Upload Section -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+                            <h3 class="text-lg font-semibold mb-4">Upload Lecture Materials</h3>
+                            
+                            <!-- File Upload Areas -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                                <!-- PPT Upload -->
+                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors cursor-pointer" data-implementation="Should handle PPT file uploads">
+                                    <span class="material-icons text-4xl text-gray-400 mb-2">slideshow</span>
+                                    <p class="font-medium text-gray-700">Upload PPT</p>
+                                    <p class="text-sm text-gray-500">Drag & drop or click</p>
+                                </div>
+
+                                <!-- Notes Upload -->
+                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors cursor-pointer" data-implementation="Should handle notes file uploads">
+                                    <span class="material-icons text-4xl text-gray-400 mb-2">description</span>
+                                    <p class="font-medium text-gray-700">Upload Notes</p>
+                                    <p class="text-sm text-gray-500">PDF, TXT, DOCX</p>
+                                </div>
+
+                                <!-- Recording Upload -->
+                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors cursor-pointer" data-implementation="Should handle audio file uploads">
+                                    <span class="material-icons text-4xl text-gray-400 mb-2">mic</span>
+                                    <p class="font-medium text-gray-700">Upload Recording</p>
+                                    <p class="text-sm text-gray-500">MP3, WAV, M4A</p>
+                                </div>
+                            </div>
+
+                            <!-- Processing Options -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Subject Area</label>
+                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" data-bind="processingOptions.subject">
+                                        <option value="">Select subject</option>
+                                        <option value="physics">Physics</option>
+                                        <option value="chemistry">Chemistry</option>
+                                        <option value="mathematics">Mathematics</option>
+                                        <option value="engineering">Engineering</option>
+                                        <option value="business">Business</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Difficulty Level</label>
+                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" data-bind="processingOptions.difficulty">
+                                        <option value="beginner">Beginner</option>
+                                        <option value="intermediate">Intermediate</option>
+                                        <option value="advanced">Advanced</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button class="w-full bg-primary text-white py-3 px-6 rounded-lg font-medium hover:bg-primary-dark transition-colors shadow-lg" data-event="click:processLecture" data-implementation="Should trigger AI processing">
+                                Process with AI
+                            </button>
+                        </div>
+
+                        <!-- Results Section (Mock Results) -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6" data-mock="true">
+                            <h3 class="text-lg font-semibold mb-4">Processed Results</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Summary -->
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <h4 class="font-semibold text-primary mb-2">📋 Summary</h4>
+                                    <p class="text-sm text-gray-600">Key concepts and main points extracted from your lecture materials.</p>
+                                </div>
+
+                                <!-- Terminology -->
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <h4 class="font-semibold text-secondary mb-2">📚 Key Terms</h4>
+                                    <p class="text-sm text-gray-600">Important terminology with explanations in your preferred language.</p>
+                                </div>
+
+                                <!-- Background Knowledge -->
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <h4 class="font-semibold text-accent mb-2">🎯 Background Cards</h4>
+                                    <p class="text-sm text-gray-600">Additional context and prerequisite knowledge explanations.</p>
+                                </div>
+
+                                <!-- Quiz -->
+                                <div class="border border-gray-200 rounded-lg p-4">
+                                    <h4 class="font-semibold text-purple-600 mb-2">❓ Practice Quiz</h4>
+                                    <p class="text-sm text-gray-600">Auto-generated questions to test your understanding.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_COMPONENT: LectureReformatter -->
+
+                    <!-- Emotional Translator View -->
+                    <!-- @COMPONENT: EmotionalTranslator [F2 - Emotional support chat interface] -->
+                    <div id="emotional-translator-view" class="hidden max-w-4xl mx-auto">
+                        <div class="mb-6">
+                            <h2 class="text-2xl font-bold text-on-surface mb-2">Emotional Support Chat</h2>
+                            <p class="text-gray-600">Share your feelings and get personalized emotional support with cultural understanding.</p>
+                        </div>
+
+                        <!-- Chat Interface -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden" style="height: 600px;">
+                            <!-- Chat Header -->
+                            <div class="bg-gradient-to-r from-secondary to-green-500 text-white p-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                                        <span class="material-icons">psychology</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold">UniBuddy Emotional Support</h3>
+                                        <p class="text-sm opacity-90">Always here to listen and help</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Chat Messages -->
+                            <div class="flex-1 p-4 space-y-4 overflow-y-auto" style="height: calc(100% - 140px);">
+                                <!-- @MAP: chatMessages.map(message => ( -->
+                                <!-- AI Message -->
+                                <div class="flex items-start space-x-3" data-mock="true">
+                                    <div class="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <span class="material-icons text-secondary text-sm">psychology</span>
+                                    </div>
+                                    <div class="bg-gray-100 rounded-2xl rounded-tl-sm p-3 max-w-md">
+                                        <p class="text-sm">Hello! I'm here to support you. How are you feeling today? Remember, it's completely normal to have ups and downs in your academic journey.</p>
+                                        <div class="flex items-center mt-2 text-xs text-gray-500">
+                                            <span class="material-icons text-xs mr-1">sentiment_satisfied</span>
+                                            <span>Supportive tone detected</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- User Message -->
+                                <div class="flex items-start justify-end space-x-3" data-mock="true">
+                                    <div class="bg-primary text-white rounded-2xl rounded-tr-sm p-3 max-w-md">
+                                        <p class="text-sm">I'm feeling overwhelmed with my physics assignment. The professor's explanation was confusing and I don't know where to start.</p>
+                                    </div>
+                                    <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <span class="material-icons text-primary text-sm">person</span>
+                                    </div>
+                                </div>
+
+                                <!-- AI Response with Emotion Analysis -->
+                                <div class="flex items-start space-x-3" data-mock="true">
+                                    <div class="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <span class="material-icons text-secondary text-sm">psychology</span>
+                                    </div>
+                                    <div class="space-y-3">
+                                        <div class="bg-gray-100 rounded-2xl rounded-tl-sm p-3 max-w-md">
+                                            <p class="text-sm">I understand that feeling overwhelmed with assignments can be really stressful. Let me help you break this down into manageable steps. Would you like me to suggest some study strategies or connect you with relevant campus resources?</p>
+                                        </div>
+                                        <!-- Emotion Analysis Card -->
+                                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 max-w-md">
+                                            <div class="flex items-center mb-2">
+                                                <span class="material-icons text-yellow-600 text-sm mr-1">psychology</span>
+                                                <span class="text-xs font-medium text-yellow-800">Emotion Analysis</span>
+                                            </div>
+                                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                                <div>Stress Level: <span class="text-orange-600">High</span></div>
+                                                <div>Confidence: <span class="text-red-600">Low</span></div>
+                                                <div>Academic Anxiety: <span class="text-orange-600">Elevated</span></div>
+                                                <div>Support Needed: <span class="text-blue-600">Yes</span></div>
+                                            </div>
+                                        </div>
+                                        <!-- Resource Suggestions -->
+                                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 max-w-md">
+                                            <div class="flex items-center mb-2">
+                                                <span class="material-icons text-blue-600 text-sm mr-1">lightbulb</span>
+                                                <span class="text-xs font-medium text-blue-800">Suggested Resources</span>
+                                            </div>
+                                            <div class="space-y-1 text-xs">
+                                                <div class="flex items-center">
+                                                    <span class="material-icons text-xs mr-1">school</span>
+                                                    <span>Physics Tutoring Center</span>
+                                                </div>
+                                                <div class="flex items-center">
+                                                    <span class="material-icons text-xs mr-1">group</span>
+                                                    <span>Study Group Matching</span>
+                                                </div>
+                                                <div class="flex items-center">
+                                                    <span class="material-icons text-xs mr-1">psychology</span>
+                                                    <span>Student Counseling Services</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- @END_MAP )) -->
+                            </div>
+
+                            <!-- Chat Input -->
+                            <div class="border-t border-gray-200 p-4">
+                                <div class="flex items-center space-x-3">
+                                    <input 
+                                        type="text" 
+                                        placeholder="Share your feelings... I'm here to listen 💝"
+                                        class="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-secondary focus:border-transparent"
+                                        data-bind="chatInput"
+                                    />
+                                    <button class="bg-secondary text-white p-2 rounded-full hover:bg-green-600 transition-colors" data-event="click:sendMessage" data-implementation="Should process emotion and generate empathetic response">
+                                        <span class="material-icons">send</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_COMPONENT: EmotionalTranslator -->
+
+                    <!-- Communication Helper View -->
+                    <!-- @COMPONENT: CommunicationHelper [F3 - Academic communication templates] -->
+                    <div id="communication-helper-view" class="hidden max-w-4xl mx-auto">
+                        <div class="mb-6">
+                            <h2 class="text-2xl font-bold text-on-surface mb-2">Communication Helper</h2>
+                            <p class="text-gray-600">Get help with emails, presentations, and academic communication using Korean cultural context.</p>
+                        </div>
+
+                        <!-- Template Categories -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                            <!-- Email Templates -->
+                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow" data-event="click:selectEmailTemplate">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <span class="material-icons text-blue-600">email</span>
+                                    </div>
+                                    <h3 class="ml-3 text-lg font-semibold">Email Templates</h3>
+                                </div>
+                                <p class="text-gray-600 text-sm mb-4">Professional emails to professors, staff, and peers with proper Korean etiquette.</p>
+                                <div class="space-y-1 text-xs text-gray-500">
+                                    <div>• Professor consultation requests</div>
+                                    <div>• Assignment submission</div>
+                                    <div>• Meeting scheduling</div>
+                                </div>
+                            </div>
+
+                            <!-- Presentation Scripts -->
+                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow" data-event="click:selectPresentationTemplate">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                                        <span class="material-icons text-green-600">co_present</span>
+                                    </div>
+                                    <h3 class="ml-3 text-lg font-semibold">Presentation Scripts</h3>
+                                </div>
+                                <p class="text-gray-600 text-sm mb-4">Well-structured presentation templates following Korean academic conventions.</p>
+                                <div class="space-y-1 text-xs text-gray-500">
+                                    <div>• Opening and closing remarks</div>
+                                    <div>• Q&A session responses</div>
+                                    <div>• Group project presentations</div>
+                                </div>
+                            </div>
+
+                            <!-- Question Templates -->
+                            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 cursor-pointer hover:shadow-md transition-shadow" data-event="click:selectQuestionTemplate">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
+                                        <span class="material-icons text-orange-600">help</span>
+                                    </div>
+                                    <h3 class="ml-3 text-lg font-semibold">Question Templates</h3>
+                                </div>
+                                <p class="text-gray-600 text-sm mb-4">Polite ways to ask questions in class, office hours, or academic discussions.</p>
+                                <div class="space-y-1 text-xs text-gray-500">
+                                    <div>• Clarification requests</div>
+                                    <div>• Office hours questions</div>
+                                    <div>• Study group inquiries</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Template Generator -->
+                        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                            <h3 class="text-lg font-semibold mb-4">Create Communication Template</h3>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Communication Type</label>
+                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" data-bind="templateType">
+                                        <option value="email">Email to Professor</option>
+                                        <option value="presentation">Presentation Script</option>
+                                        <option value="question">Question in Class</option>
+                                        <option value="request">Request for Help</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Formality Level</label>
+                                    <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" data-bind="formalityLevel">
+                                        <option value="very-formal">Very Formal (교수님께)</option>
+                                        <option value="formal">Formal (동료/선배)</option>
+                                        <option value="casual">Casual (친구)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Your Message</label>
+                                <textarea 
+                                    rows="4" 
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                                    placeholder="Write your message in your own words... I'll help make it culturally appropriate for Korean academic context."
+                                    data-bind="userMessage"
+                                ></textarea>
+                            </div>
+
+                            <button class="w-full bg-accent text-white py-3 px-6 rounded-lg font-medium hover:bg-orange-600 transition-colors shadow-lg mb-4" data-event="click:generateTemplate" data-implementation="Should process and culturally adapt the message">
+                                Generate Polite Version
+                            </button>
+
+                            <!-- Generated Template Result -->
+                            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50" data-mock="true">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h4 class="font-semibold text-gray-800">Generated Template</h4>
+                                    <div class="flex space-x-2">
+                                        <button class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded" data-mock="true">Culturally Appropriate ✓</button>
+                                        <button class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded" data-mock="true">Formal Tone ✓</button>
+                                    </div>
+                                </div>
+                                <div class="bg-white border rounded p-3 text-sm" data-mock="true">
+                                    <p class="mb-2"><strong>Subject:</strong> 수업 관련 질문이 있습니다 (Question about the lecture)</p>
+                                    <p class="mb-2">안녕하세요, 김교수님.</p>
+                                    <p class="mb-2">물리학개론 수업을 듣고 있는 [Your Name]입니다.</p>
+                                    <p class="mb-2">지난 시간에 다루었던 뉴턴의 법칙 부분에서 이해가 잘 되지 않는 부분이 있어서 질문드립니다...</p>
+                                    <p class="mb-2">바쁘시더라도 시간이 되실 때 답변 주시면 감사하겠습니다.</p>
+                                    <p>감사합니다.</p>
+                                </div>
+                                
+                                <!-- Cultural Tips -->
+                                <div class="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded">
+                                    <h5 class="text-sm font-semibold text-yellow-800 mb-1">Cultural Tips:</h5>
+                                    <ul class="text-xs text-yellow-700 space-y-1">
+                                        <li>• Always use honorific language (존댓말) when addressing professors</li>
+                                        <li>• Include your name and course information for context</li>
+                                        <li>• Express gratitude even for potential inconvenience</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_COMPONENT: CommunicationHelper -->
+                </main>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: MainApp -->
+    </div>
+    <!-- @END_COMPONENT: AppShell -->
+
+    <script>
+    (function() {
+        // TODO: Implement proper state management and navigation
+        // TODO: Implement real-time emotion analysis
+        // TODO: Implement file upload handling
+        // TODO: Implement AI processing workflows
+        // TODO: Implement internationalization system
+        // TODO: Implement data persistence and user preferences
+        
+        // Mock navigation functionality
+        function showView(viewId) {
+            // Hide all views
+            const views = ['dashboard-view', 'lecture-reformatter-view', 'emotional-translator-view', 'communication-helper-view'];
+            views.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) element.classList.add('hidden');
+            });
+            
+            // Show selected view
+            const targetView = document.getElementById(viewId);
+            if (targetView) targetView.classList.remove('hidden');
+            
+            // Update navigation active state
+            const navLinks = document.querySelectorAll('[data-navigation]');
+            navLinks.forEach(link => {
+                link.classList.remove('bg-primary', 'text-white');
+                link.classList.add('hover:bg-gray-100');
+            });
+            
+            const activeLink = document.querySelector(`[data-navigation="${viewId.replace('-view', '')}"]`);
+            if (activeLink) {
+                activeLink.classList.add('bg-primary', 'text-white');
+                activeLink.classList.remove('hover:bg-gray-100');
+            }
+        }
+        
+        // Navigation event listeners
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('[data-navigation="dashboard"]')) {
+                showView('dashboard-view');
+            } else if (e.target.closest('[data-navigation="lecture-reformatter"]') || e.target.closest('[data-event="click:openLectureReformatter"]')) {
+                showView('lecture-reformatter-view');
+            } else if (e.target.closest('[data-navigation="emotional-translator"]') || e.target.closest('[data-event="click:openEmotionalTranslator"]')) {
+                showView('emotional-translator-view');
+            } else if (e.target.closest('[data-navigation="communication-helper"]') || e.target.closest('[data-event="click:openCommunicationHelper"]')) {
+                showView('communication-helper-view');
+            }
+        });
+        
+        // Initial setup - show onboarding or main app
+        // For demo purposes, hide onboarding and show main app
+        setTimeout(() => {
+            document.getElementById('onboarding-screen').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+        }, 100);
+        
+    })();
+    </script>
+</body>
+</html>

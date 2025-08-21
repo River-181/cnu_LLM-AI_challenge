@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniBuddy - Chungnam National University</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/heroicons@2.0.16/24/outline/index.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'cnu-blue': '#1e40af',
+                        'cnu-light': '#3b82f6',
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- @COMPONENT: NavigationHeader [user profile, language switcher, notifications] -->
+    <nav class="bg-cnu-blue text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-4">
+                    <div class="bg-white rounded-full p-2">
+                        <svg class="w-6 h-6 text-cnu-blue" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">UniBuddy</h1>
+                        <p class="text-blue-100 text-xs">Chungnam National University</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <!-- Language Switcher -->
+                    <div class="relative">
+                        <select class="bg-blue-700 text-white border border-blue-600 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-300">
+                            <option value="en">🇺🇸 English</option>
+                            <option value="ko" selected>🇰🇷 한국어</option>
+                            <option value="zh">🇨🇳 中文</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Notifications -->
+                    <button class="relative p-2 hover:bg-blue-700 rounded-lg transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5-5-5 5h5z"></path>
+                        </svg>
+                        <span class="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                    </button>
+                    
+                    <!-- User Profile -->
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+                            <span class="text-white text-sm font-semibold" data-bind="user.initials">김민수</span>
+                        </div>
+                        <div class="text-right hidden sm:block">
+                            <p class="text-sm font-medium" data-bind="user.name">김민수</p>
+                            <p class="text-xs text-blue-200">국제경영학과</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- @END_COMPONENT: NavigationHeader -->
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- @COMPONENT: WelcomeSection [personalized greeting, quick stats] -->
+        <div class="mb-8">
+            <div class="bg-white rounded-xl shadow-sm p-6 border">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">안녕하세요, <span data-bind="user.name" data-mock="true">김민수</span>님! 👋</h2>
+                        <p class="text-gray-600">UniBuddy와 함께 오늘도 성공적인 학습을 시작해보세요.</p>
+                    </div>
+                    <div class="mt-4 sm:mt-0 flex items-center space-x-4">
+                        <div class="text-center">
+                            <p class="text-2xl font-bold text-cnu-blue" data-bind="stats.lecturesProcessed">12</p>
+                            <p class="text-xs text-gray-500">처리된 강의</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-2xl font-bold text-green-600" data-bind="stats.emotionalScore">4.2</p>
+                            <p class="text-xs text-gray-500">정서 점수</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-2xl font-bold text-orange-600" data-bind="stats.templatesCreated">8</p>
+                            <p class="text-xs text-gray-500">생성된 템플릿</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: WelcomeSection -->
+
+        <!-- @COMPONENT: QuickActions [frequent actions, search] -->
+        <div class="mb-8">
+            <div class="bg-white rounded-xl shadow-sm p-6 border">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4 sm:mb-0">빠른 작업</h3>
+                    <div class="relative">
+                        <input type="text" placeholder="자료 검색..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cnu-light focus:border-transparent w-full sm:w-64">
+                        <svg class="absolute left-3 top-2.5 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <button class="flex items-center justify-center space-x-2 bg-blue-50 hover:bg-blue-100 text-cnu-blue p-3 rounded-lg transition-colors" data-event="click:quickUpload">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                        <span class="text-sm font-medium">파일 업로드</span>
+                    </button>
+                    
+                    <button class="flex items-center justify-center space-x-2 bg-green-50 hover:bg-green-100 text-green-700 p-3 rounded-lg transition-colors" data-event="click:startChat">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                        </svg>
+                        <span class="text-sm font-medium">채팅 시작</span>
+                    </button>
+                    
+                    <button class="flex items-center justify-center space-x-2 bg-orange-50 hover:bg-orange-100 text-orange-700 p-3 rounded-lg transition-colors" data-event="click:createTemplate">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <span class="text-sm font-medium">템플릿 생성</span>
+                    </button>
+                    
+                    <button class="flex items-center justify-center space-x-2 bg-purple-50 hover:bg-purple-100 text-purple-700 p-3 rounded-lg transition-colors" data-event="click:viewProgress">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        <span class="text-sm font-medium">진도 확인</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: QuickActions -->
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Main Features Section -->
+            <div class="lg:col-span-2">
+                <!-- @COMPONENT: MainFeatures [three core function cards] -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-6">주요 기능</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        
+                        <!-- F1: AI Lecture Reformatter -->
+                        <div class="bg-white rounded-xl shadow-sm border hover:shadow-md transition-shadow cursor-pointer group" data-event="click:navigateToF1">
+                            <div class="p-6">
+                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-blue-200 transition-colors">
+                                    <svg class="w-6 h-6 text-cnu-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                </div>
+                                <h4 class="text-lg font-semibold text-gray-900 mb-2">AI 강의 리포맷터</h4>
+                                <p class="text-gray-600 text-sm mb-4">강의 자료를 AI로 요약하고 용어 해설, 퀴즈를 자동 생성합니다.</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">최근 사용: 2시간 전</span>
+                                    <div class="w-8 h-8 bg-cnu-blue rounded-full flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- F2: Emotional Translator -->
+                        <div class="bg-white rounded-xl shadow-sm border hover:shadow-md transition-shadow cursor-pointer group" data-event="click:navigateToF2">
+                            <div class="p-6">
+                                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-green-200 transition-colors">
+                                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
+                                </div>
+                                <h4 class="text-lg font-semibold text-gray-900 mb-2">마음의 통역사</h4>
+                                <p class="text-gray-600 text-sm mb-4">감정을 분석하고 공감적 대화와 상담 자원을 제공합니다.</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">오늘 대화: 5회</span>
+                                    <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- F3: Communication Helper -->
+                        <div class="bg-white rounded-xl shadow-sm border hover:shadow-md transition-shadow cursor-pointer group" data-event="click:navigateToF3">
+                            <div class="p-6">
+                                <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4 group-hover:bg-orange-200 transition-colors">
+                                    <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                <h4 class="text-lg font-semibold text-gray-900 mb-2">교수 소통 헬퍼</h4>
+                                <p class="text-gray-600 text-sm mb-4">한국 문화에 맞는 이메일과 발표 템플릿을 생성합니다.</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">생성된 템플릿: 8개</span>
+                                    <div class="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center">
+                                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: MainFeatures -->
+
+                <!-- @COMPONENT: LearningProgress [progress tracking, statistics] -->
+                <div class="bg-white rounded-xl shadow-sm p-6 border">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">학습 진도 및 통계</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Academic Progress -->
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-700 mb-3">학업 진도</h4>
+                            <div class="space-y-3">
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-sm text-gray-600">강의 자료 처리</span>
+                                        <span class="text-sm font-medium text-cnu-blue">12/15</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-cnu-blue h-2 rounded-full" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-sm text-gray-600">퀴즈 완료</span>
+                                        <span class="text-sm font-medium text-green-600">28/30</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-green-600 h-2 rounded-full" style="width: 93%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Emotional Wellbeing -->
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-700 mb-3">정서적 웰빙</h4>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                                    <div>
+                                        <p class="text-sm font-medium text-green-800">전체 정서 점수</p>
+                                        <p class="text-xs text-green-600">지난 주 대비 +0.3 향상</p>
+                                    </div>
+                                    <div class="text-2xl font-bold text-green-700">4.2/5.0</div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2 text-xs">
+                                    <div class="text-center p-2 bg-gray-50 rounded">
+                                        <p class="font-medium text-gray-700">스트레스</p>
+                                        <p class="text-yellow-600 font-semibold">낮음</p>
+                                    </div>
+                                    <div class="text-center p-2 bg-gray-50 rounded">
+                                        <p class="font-medium text-gray-700">적응도</p>
+                                        <p class="text-green-600 font-semibold">높음</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: LearningProgress -->
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="lg:col-span-1">
+                <!-- @COMPONENT: RecentActivity [timeline of user actions] -->
+                <div class="bg-white rounded-xl shadow-sm p-6 border mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">최근 활동</h3>
+                    
+                    <div class="space-y-4">
+                        <!-- @MAP: recentActivities.map(activity => ( -->
+                        <div class="flex items-start space-x-3" data-mock="true">
+                            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <svg class="w-4 h-4 text-cnu-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm text-gray-900 font-medium">경영전략론 PPT 요약 완료</p>
+                                <p class="text-xs text-gray-500">2시간 전</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3" data-mock="true">
+                            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm text-gray-900 font-medium">감정 상담 세션 완료</p>
+                                <p class="text-xs text-gray-500">어제</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3" data-mock="true">
+                            <div class="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <svg class="w-4 h-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm text-gray-900 font-medium">교수님께 과제 질문 이메일 전송</p>
+                                <p class="text-xs text-gray-500">2일 전</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3" data-mock="true">
+                            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2-2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm text-gray-900 font-medium">주간 학습 진도 리포트 생성</p>
+                                <p class="text-xs text-gray-500">3일 전</p>
+                            </div>
+                        </div>
+                        <!-- @END_MAP )) -->
+                    </div>
+                    
+                    <button class="w-full mt-4 text-sm text-cnu-blue hover:bg-blue-50 py-2 rounded-lg transition-colors" data-event="click:viewAllActivity">
+                        모든 활동 보기
+                    </button>
+                </div>
+                <!-- @END_COMPONENT: RecentActivity -->
+
+                <!-- @COMPONENT: CNUIntegration [campus services connection] -->
+                <div class="bg-white rounded-xl shadow-sm p-6 border mb-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">CNU 서비스 연결</h3>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">국제교류본부</p>
+                                    <p class="text-xs text-gray-500">연결됨</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">학생상담센터</p>
+                                    <p class="text-xs text-gray-500">연결됨</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.464 0L4.35 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">LMS 연동</p>
+                                    <p class="text-xs text-gray-500">설정 필요</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: CNUIntegration -->
+
+                <!-- @COMPONENT: NotificationsPanel [alerts, reminders] -->
+                <div class="bg-white rounded-xl shadow-sm p-6 border">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">알림</h3>
+                    
+                    <div class="space-y-3">
+                        <div class="p-3 bg-blue-50 border-l-4 border-blue-400 rounded-r-lg" data-mock="true">
+                            <p class="text-sm font-medium text-blue-900">새로운 강의 자료 업로드</p>
+                            <p class="text-xs text-blue-700 mt-1">경영전략론 - 강의 12차시</p>
+                            <p class="text-xs text-blue-600 mt-1">30분 전</p>
+                        </div>
+                        
+                        <div class="p-3 bg-green-50 border-l-4 border-green-400 rounded-r-lg" data-mock="true">
+                            <p class="text-sm font-medium text-green-900">상담 세션 예약 완료</p>
+                            <p class="text-xs text-green-700 mt-1">오늘 오후 3시 - 학생상담센터</p>
+                            <p class="text-xs text-green-600 mt-1">1시간 전</p>
+                        </div>
+                        
+                        <div class="p-3 bg-orange-50 border-l-4 border-orange-400 rounded-r-lg" data-mock="true">
+                            <p class="text-sm font-medium text-orange-900">과제 제출 마감 알림</p>
+                            <p class="text-xs text-orange-700 mt-1">국제경영론 레포트 - 2일 남음</p>
+                            <p class="text-xs text-orange-600 mt-1">2시간 전</p>
+                        </div>
+                    </div>
+                    
+                    <button class="w-full mt-4 text-sm text-gray-600 hover:bg-gray-50 py-2 rounded-lg transition-colors" data-event="click:viewAllNotifications">
+                        모든 알림 보기
+                    </button>
+                </div>
+                <!-- @END_COMPONENT: NotificationsPanel -->
+            </div>
+        </div>
+    </div>
+
+    <!-- @FUNCTIONALITY: Add loading states, error handling, and navigation logic -->
+    <script>
+        (function() {
+            // TODO: Implement business logic, API calls, or state management
+            
+            // Demo interactions for mockup purposes
+            function addClickHandlers() {
+                // Quick action buttons
+                document.querySelectorAll('[data-event^="click:"]').forEach(element => {
+                    element.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const action = this.getAttribute('data-event').split(':')[1];
+                        console.log(`Action triggered: ${action}`);
+                        
+                        // Add loading state simulation
+                        if (action.includes('upload') || action.includes('create')) {
+                            this.classList.add('opacity-50');
+                            this.setAttribute('disabled', 'true');
+                            setTimeout(() => {
+                                this.classList.remove('opacity-50');
+                                this.removeAttribute('disabled');
+                            }, 2000);
+                        }
+                    });
+                });
+                
+                // Feature cards hover effects
+                document.querySelectorAll('.group').forEach(card => {
+                    card.addEventListener('mouseenter', function() {
+                        this.classList.add('scale-105');
+                    });
+                    
+                    card.addEventListener('mouseleave', function() {
+                        this.classList.remove('scale-105');
+                    });
+                });
+            }
+            
+            // Initialize when DOM is loaded
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', addClickHandlers);
+            } else {
+                addClickHandlers();
+            }
+        })();
+    </script>
+</body>
+</html>

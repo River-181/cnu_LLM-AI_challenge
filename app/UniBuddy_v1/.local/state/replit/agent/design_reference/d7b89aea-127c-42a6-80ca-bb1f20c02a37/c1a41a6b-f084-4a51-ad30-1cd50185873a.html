@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniBuddy - AI Companion for International Students</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/heroicons@2.0.16/24/outline/index.js" type="module"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    'sans': ['Inter', 'sans-serif'],
+                },
+                colors: {
+                    'cnu-blue': {
+                        50: '#eff6ff',
+                        500: '#3b82f6',
+                        600: '#2563eb',
+                        700: '#1d4ed8',
+                        800: '#1e3a8a',
+                        900: '#1e40af'
+                    }
+                }
+            }
+        }
+    };
+    </script>
+</head>
+<body class="font-sans bg-gray-50 min-h-screen">
+
+    <!-- @COMPONENT: WelcomeScreen -->
+    <div id="welcomeScreen" class="min-h-screen bg-gradient-to-br from-cnu-blue-600 to-cnu-blue-800 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+            <!-- CNU Logo and Branding -->
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-cnu-blue-700 rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/>
+                    </svg>
+                </div>
+                <h1 class="text-2xl font-bold text-cnu-blue-800 mb-2">Welcome to UniBuddy</h1>
+                <p class="text-gray-600 text-sm">Chungnam National University</p>
+                <p class="text-gray-500 text-xs mt-1">Your AI companion for academic and emotional support</p>
+            </div>
+
+            <!-- User Setup Form -->
+            <div class="space-y-4">
+                <!-- Name Input -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                        What should we call you?
+                    </label>
+                    <input type="text" placeholder="Enter your preferred name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cnu-blue-500 focus:border-transparent" data-bind="user.preferredName">
+                </div>
+
+                <!-- Language Selection -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"/>
+                        </svg>
+                        Choose your preferred language
+                    </label>
+                    <select class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cnu-blue-500 focus:border-transparent" data-bind="user.language">
+                        <option value="">Select Language</option>
+                        <option value="ko">한국어 (Korean)</option>
+                        <option value="en">English</option>
+                        <option value="zh">中文 (Chinese)</option>
+                        <option value="ja">日本語 (Japanese)</option>
+                        <option value="vi">Tiếng Việt (Vietnamese)</option>
+                    </select>
+                </div>
+
+                <!-- CNU Services Integration Notice -->
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div class="flex items-start">
+                        <svg class="w-5 h-5 text-blue-500 mr-3 mt-0.5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                        <div>
+                            <p class="text-sm font-medium text-blue-800">Connected to CNU Services</p>
+                            <p class="text-xs text-blue-600 mt-1">UniBuddy integrates with International Affairs Office, Student Counseling Center, and Academic Support services to provide comprehensive assistance.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Get Started Button -->
+                <button onclick="showDashboard()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 flex items-center justify-center" data-event="click:handleGetStarted" data-implementation="Should validate form and set up user preferences">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                    </svg>
+                    Get Started with UniBuddy
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: WelcomeScreen -->
+
+    <!-- @COMPONENT: MainDashboard -->
+    <div id="dashboard" class="min-h-screen bg-gray-50 hidden">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-cnu-blue-700 rounded-lg mr-3 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-gray-900">UniBuddy</h1>
+                            <p class="text-sm text-gray-600">Chungnam National University</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <!-- @STATE: emotionalState:object = {score: 7.5, status: 'positive'} -->
+                        <div class="flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+                            <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                            <span data-bind="user.emotionalState">Feeling Good</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="text-sm text-gray-700 mr-2">Hello, <span data-bind="user.preferredName" data-mock="true">Alex</span>!</span>
+                            <div class="w-8 h-8 bg-cnu-blue-100 rounded-full flex items-center justify-center">
+                                <span class="text-cnu-blue-700 font-semibold text-sm" data-bind="user.initials" data-mock="true">A</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Personalized Welcome Message -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-2">Welcome back, <span data-bind="user.preferredName" data-mock="true">Alex</span>! 👋</h2>
+                <p class="text-gray-600">Ready to tackle your academic goals today? Your AI buddy is here to help with both learning and emotional support.</p>
+            </div>
+
+            <!-- Real-time Emotion Status & Recommendations -->
+            <!-- @STATE: sentimentAnalysis:object = {currentEmotion: 'positive', confidenceScore: 8.5} -->
+            <div class="mb-8 p-6 bg-gradient-to-r from-green-50 to-blue-50 rounded-xl border border-green-200">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                            <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Emotional Wellness Check</h3>
+                            <p class="text-sm text-gray-600">Your current mood: <span class="font-medium text-green-700" data-bind="sentimentAnalysis.currentEmotion" data-mock="true">Positive and Motivated</span></p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-2xl font-bold text-green-600" data-bind="sentimentAnalysis.score" data-mock="true">8.5/10</div>
+                        <p class="text-xs text-gray-500">Wellness Score</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Core Features Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <!-- F1: AI Lecture Reformatter -->
+                <!-- @COMPONENT: FeatureCard -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer group">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-blue-200 transition-colors">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-gray-900">AI Lecture Reformatter</h3>
+                            <div class="flex items-center mt-1">
+                                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">F1</span>
+                                <span class="text-xs text-gray-500 ml-2">Smart Learning</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-4">Transform your lecture materials into personalized study packages with AI-powered summaries, terminology explanations, and custom quizzes.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-green-600 font-medium">✓ Multi-language support</span>
+                        <svg class="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- F2: Heart Translator (마음의 통역사) -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer group">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-green-200 transition-colors">
+                            <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-gray-900">Heart Translator</h3>
+                            <div class="flex items-center mt-1">
+                                <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">F2</span>
+                                <span class="text-xs text-gray-500 ml-2">Emotional AI</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-4">Your empathetic AI companion that understands cultural context and provides emotional support with real-time sentiment analysis.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-green-600 font-medium">✓ Cultural sensitivity</span>
+                        <svg class="w-4 h-4 text-gray-400 group-hover:text-green-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- F3: Professor Communication Helper -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer group">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-orange-200 transition-colors">
+                            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-gray-900">Communication Helper</h3>
+                            <div class="flex items-center mt-1">
+                                <span class="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full">F3</span>
+                                <span class="text-xs text-gray-500 ml-2">Smart Messaging</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-4">Generate culturally appropriate emails, questions, and presentation scripts with Korean academic etiquette and polite expressions.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-green-600 font-medium">✓ Korean cultural context</span>
+                        <svg class="w-4 h-4 text-gray-400 group-hover:text-orange-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Community Board -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow cursor-pointer group">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-purple-200 transition-colors">
+                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-semibold text-gray-900">Community Board</h3>
+                            <div class="flex items-center mt-1">
+                                <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                <span class="text-xs text-gray-500">3 new recommendations</span>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600 mb-4">Connect with fellow international students through emotion-matched community boards and mentoring sessions.</p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-green-600 font-medium">✓ Sentiment-based matching</span>
+                        <svg class="w-4 h-4 text-gray-400 group-hover:text-purple-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </div>
+                </div>
+                <!-- @END_COMPONENT: FeatureCard -->
+            </div>
+
+            <!-- Sentiment-Match Engine Recommendations -->
+            <!-- @STATE: sentimentRecommendations:array = [] -->
+            <div class="mb-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Personalized Recommendations</h3>
+                    <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">Powered by Sentiment-Match Engine</span>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- @MAP: recommendations.map(recommendation => ( -->
+                    <!-- Healing Board Recommendation -->
+                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4">
+                        <div class="flex items-center mb-3">
+                            <div class="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center mr-3">
+                                <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-900">Healing Board</h4>
+                                <p class="text-xs text-gray-600">Wellness & Relaxation</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-700 mb-3">Based on your positive mood, join others sharing uplifting experiences and study tips.</p>
+                        <button class="text-xs bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-full transition-colors">Join Board</button>
+                    </div>
+
+                    <!-- Study Help Board -->
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4">
+                        <div class="flex items-center mb-3">
+                            <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
+                                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-900">Study Help Board</h4>
+                                <p class="text-xs text-gray-600">Academic Support</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-700 mb-3">Connect with study groups and get help with challenging courses from your peers.</p>
+                        <button class="text-xs bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-full transition-colors">Browse Posts</button>
+                    </div>
+
+                    <!-- Mentoring Session -->
+                    <div class="bg-gradient-to-r from-purple-50 to-violet-50 border border-purple-200 rounded-xl p-4">
+                        <div class="flex items-center mb-3">
+                            <div class="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mr-3">
+                                <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-gray-900">Mentor Available</h4>
+                                <p class="text-xs text-gray-600">1-on-1 Support</p>
+                            </div>
+                        </div>
+                        <p class="text-sm text-gray-700 mb-3">Senior students available for academic and cultural guidance sessions.</p>
+                        <button class="text-xs bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded-full transition-colors">Book Session</button>
+                    </div>
+                    <!-- @END_MAP )) -->
+                </div>
+            </div>
+
+            <!-- Quick Access Floating Chat -->
+            <!-- @FUNCTIONALITY: This should implement real-time chat with sentiment analysis -->
+            <div class="fixed bottom-6 right-6 z-50">
+                <button class="bg-cnu-blue-600 hover:bg-cnu-blue-700 text-white p-4 rounded-full shadow-lg transition-colors group">
+                    <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                    </svg>
+                </button>
+                <!-- Chat notification badge -->
+                <div class="absolute -top-2 -right-2 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center">
+                    <span class="text-xs text-white font-medium">!</span>
+                </div>
+            </div>
+
+            <!-- Recent Activity & Status -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Recent Activity -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <h3 class="font-semibold text-gray-900 mb-4 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            Recent Activity
+                        </h3>
+                        
+                        <!-- @MAP: activities.map(activity => ( -->
+                        <div class="space-y-3">
+                            <div class="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg" data-mock="true">
+                                <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-900">Completed Korean Language Quiz - Chapter 5</p>
+                                    <p class="text-xs text-gray-500">2 hours ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg" data-mock="true">
+                                <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-900">Emotion check-in: Feeling motivated</p>
+                                    <p class="text-xs text-gray-500">5 hours ago</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3 p-3 bg-gray-50 rounded-lg" data-mock="true">
+                                <div class="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-900">Joined "International Student Study Group"</p>
+                                    <p class="text-xs text-gray-500">1 day ago</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- @END_MAP )) -->
+                    </div>
+                </div>
+
+                <!-- Wellness Stats -->
+                <div class="space-y-6">
+                    <!-- Emotion Tracking -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <h3 class="font-semibold text-gray-900 mb-4">Emotional Wellness</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">This Week</span>
+                                <span class="text-sm font-medium text-green-600" data-mock="true">Stable & Positive</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: 85%" data-mock="true"></div>
+                            </div>
+                            <p class="text-xs text-gray-500">Based on chat interactions and self-reports</p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                        <h3 class="font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                        <div class="space-y-3">
+                            <button class="w-full text-left p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                    </svg>
+                                    <span class="text-sm font-medium">Upload Lecture Material</span>
+                                </div>
+                            </button>
+                            <button class="w-full text-left p-3 bg-green-50 hover:bg-green-100 rounded-lg transition-colors">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                    </svg>
+                                    <span class="text-sm font-medium">Start Emotional Check-in</span>
+                                </div>
+                            </button>
+                            <button class="w-full text-left p-3 bg-orange-50 hover:bg-orange-100 rounded-lg transition-colors">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 text-orange-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                    </svg>
+                                    <span class="text-sm font-medium">Draft Professor Email</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <!-- @END_COMPONENT: MainDashboard -->
+
+    <script>
+    (function() {
+        // TODO: Implement user preference storage and retrieval
+        // TODO: Implement sentiment analysis API integration  
+        // TODO: Implement real-time emotion monitoring
+        // TODO: Implement community board recommendation engine
+        
+        function showDashboard() {
+            // TODO: Validate user input and save preferences
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+        }
+        
+        function updateEmotionalState(newState) {
+            // TODO: Update UI based on emotional state changes
+            // TODO: Trigger appropriate community board recommendations
+        }
+        
+        function connectToSentimentEngine() {
+            // TODO: Initialize real-time sentiment analysis
+            // TODO: Set up automatic community board matching
+        }
+        
+        // Make functions globally available
+        window.showDashboard = showDashboard;
+        window.updateEmotionalState = updateEmotionalState;
+        window.connectToSentimentEngine = connectToSentimentEngine;
+    })();
+    </script>
+</body>
+</html>
